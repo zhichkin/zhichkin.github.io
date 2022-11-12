@@ -1,0 +1,178 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zhichkin ©</title>
+</head>
+<style>
+.table
+{
+  border:1px solid black;
+}
+td
+{
+  padding:5px;
+  border:1px solid black;
+}
+</style>
+<body>
+
+<h3>.NET data provider for 1C:Enterprise 8</h3>
+
+<p>
+  <a href="https://github.com/zhichkin/dajet/blob/main/doc/metadata-internals/README.md">
+  Анатомия метаданных 1С:Предприятие 8</a>
+</p>
+
+<p>
+  <a href="https://its.1c.ru/db/metod8dev/content/1591/hdoc">
+  Размещение данных 1С:Предприятия 8</a>
+</p>
+
+<p>
+  <a href="https://its.1c.ru/db/metod8dev/content/1798/hdoc">
+  Размещение данных 1С:Предприятия 8. Таблицы и поля</a>
+</p>
+
+<p>
+  <a href="https://its.1c.ru/db/metod8dev/content/1828/hdoc">
+  Особенности хранения составных типов данных</a>
+</p>
+
+<p>
+  <a href="https://its.1c.ru/db/metod8dev/browse/13/-1/1989/2910/2912/2928">
+  Язык запросов 1С:Предприятие 8 (1QL)</a>
+</p>
+
+<p>Провайдер данных является универсальным и поддерживает работу с базами данных
+1С:Предприятие 8, использующих в качестве СУБД Microsoft <b>SQL Server</b> или <b>PostgreSQL</b>.
+Провайдер данных "понимает" с какой СУБД он работает в данный момент
+из соответствующей строки подключения к базе данных.
+Алгоритм этого "понимания" очень простой - если строка подключения начинается на "Host",
+то провайдер работает с PostgreSQL, иначе - SQL Server =)</p>
+
+<b>Примеры строк подключения к базам данных 1С:Предприятие 8</b>
+<table class="table">
+  <tr>
+    <td><b>SQL Server</b></td>
+    <td>Data Source=<b>server_address</b>;Initial Catalog=<b>db_name</b>;Integrated Security=True;Encrypt=False;</td>
+  </tr>
+  <tr>
+    <td><b>PostgreSQL</b></td>
+    <td>Host=127.0.0.1;Port=5432;Database=<b>db_name</b>;Username=postgres;Password=postgres;</td>
+  </tr>
+</table>
+
+<br>
+
+<b>Система типов провайдера данных 1С:Предприятие 8</b>
+<table class="table">
+  <tr>
+    <td><b>1С</b></td>
+    <td><b>C#</b></td>
+    <td><b>SQL Server</b></td>
+    <td><b>PostgreSQL</b></td>
+  </tr>
+  <tr>
+    <td>Неопределено</td>
+    <td>null</td>
+    <td>NULL</td>
+    <td>NULL</td>
+  </tr>
+  <tr>
+    <td>Булево</td>
+    <td>bool</td>
+    <td>binary(1)</td>
+    <td>boolean</td>
+  </tr>
+  <tr>
+    <td>Число</td>
+    <td>decimal</td>
+    <td>numeric</td>
+    <td>numeric</td>
+  </tr>
+  <tr>
+    <td>Дата</td>
+    <td>DateTime</td>
+    <td>datetime2</td>
+    <td>timestamp without time zone</td>
+  </tr>
+  <tr>
+    <td>Строка</td>
+    <td>string</td>
+    <td>nvarchar</td>
+    <td>mvarchar</td>
+  </tr>
+  <tr>
+    <td>Ссылка</td>
+    <td>Entity</td>
+    <td>binary(16)</td>
+    <td>bytea</td>
+  </tr>
+  <tr>
+    <td>Составной тип</td>
+    <td>Union</td>
+    <td>Все выше перечисленные</td>
+    <td>Все выше перечисленные</td>
+  </tr>
+</table>
+
+<p>Провайдер данных .NET для 1С:Предприятие 8 отражает соответствующую систему типов,
+используемую самой платформой, а также её базами данных.</p>
+
+<p>Помимо стандартных типов данных 1С:Предприятие 8 использует такие специфичные
+для этой платформы типы данных, как <b>Ссылка</b> (Entity) и <b>Составной тип</b> (Union).</p>
+
+<h3>Тип данных Entity</h3>
+
+<p><b>Entity</b> это структура данных, которая состоит из 2-х полей: код типа и идентификатор объекта.
+Данная структура является своеобразным указателем (ссылкой) на объект в базе данных.
+Структура Entity может иметь <b>пустое значение</b>, то есть не указывать на какой-то
+конкретный объект базы данных.</p>
+<p>
+На C# данная структура объявлена так, как это показано на скриншоте ниже.
+В свою очередь в базе данных 1С это комбинация полей, имеющих постфиксы
+<b>TRef</b> (код типа) и <b>RRef</b> (идентификатор объекта).
+При этом в некоторых случаях постфикс <b>TRef</b> в целях оптимизации может отсутствовать.
+Провайдер данных все эти случаи учитывает и делает работу с этим типом данных прозрачной.
+Например, на правом скриншоте ниже поле <b>Fld1064</b> имеет 2 поля: TRef и RRef,
+а поле <b>Fld1065</b> - только одно.</p>
+<p>Код типа - это число типа integer. Для того, чтобы получить описание объекта метаданных,
+соответствующего этому коду, можно воспользоваться методом <b>GetMetadataItem(int typeCode)</b>
+класса <b><a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-metadata/MetadataCache.cs">MetadataCache</a></b>.
+Пример использования этого класса в этих целях будет приведён ниже.</p>
+
+<a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-data/Entity.cs">Исходный код Entity.cs</a>
+<table>
+<tr>
+<td><img src="img/entity-cs.png" alt="Структура данных Entity"></td>
+<td><img src="img/entity-db.png" alt="Структура данных Entity"></td>
+</tr>
+<table>
+
+<h3>Тип данных Union</h3>
+
+<p><b>Union</b> это структура данных, которая может состоять из нескольких полей на уровне базы данных.
+Однако на языке C# она реализована в виде соответствующего класса,
+который имеет поле дискриминатора (tag), указывающего на тип данных значения,
+хранимого в данный момент в структуре, и само текущее значение.
+Union, так же как и Entity, может иметь пустое значение, то есть иметь значение типа "Неопределено".
+Пример программной работы с этим типом данных будет приведён ниже.
+На скриншоте ниже поле <b>_TYPE</b> - это значение дискриминатора типа данных.
+Остальные поля используются для хранения конкретных значений, указанного в поле _TYPE типа данных.</p>
+
+<a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-data/Union.cs">Исходный код Union.cs</a>
+<table>
+<tr>
+<td colspan="2"><img src="img/union-cs.png" alt="Структура данных Union"></td>
+<tr>
+<td><img src="img/union-tag.png" alt="Дискриминатор UnionTag"></td>
+<td><img src="img/union-db.png" alt="Структура данных Union"></td>
+</tr>
+</tr>
+<table>
+
+
+
+</body>
+</html>
