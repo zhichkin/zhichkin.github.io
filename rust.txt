@@ -1,0 +1,66 @@
+Устанавливем.
+https://www.rust-lang.org/ru/
+
+Алексей Кладов. Лекции по Rust.
+https://compscicenter.ru/videos/rust/
+
+Книги:
+https://doc.rust-lang.org/stable/book/
+https://doc.rust-lang.org/rust-by-example/
+https://rust-lang.github.io/async-book/
+https://datawithrust.com
+
+Книги на русском.
+https://doc.rust-lang.ru/book/
+https://doc.rust-lang.ru/stable/rust-by-example/
+https://doc.rust-lang.ru/async-book/
+
+Библиотеки:
+https://crates.io - основная 
+https://lib.rs    - с иным тематическим взглядом
+
+Тематические сайты:
+https://www.arewewebyet.org      - Web
+https://www.areweguiyet.com      - GUI
+https://www.arewelearningyet.com - ML
+https://arewegameyet.rs          - game
+
+https://os.phil-opp.com/ru/    - Пишем OS на Rust
+https://github.com/evcxr/evcxr - Rust контекстный интерпретатор как Jupyter
+
+Нек. примеры.
+https://ivanceras.github.io/futuristic-ui/ - DOM-манипуляция на Rust'e
+https://kvarn.org/                         - SSR на Rust
+https://github.com/rustdesk/rustdesk       - удаленная доска с сервером, но gui - Flutter или Sciter на выбор
+https://github.com/ava57r/v8unpack-rs      - 1C v8unpack
+https://github.com/diesel-rs/metrics       - клиенты баз данных и их метрики
+https://github.com/spacejam/sled           - очень быстрая "родная" key-value БД
+
+Библиотеки Rust, чтобы создавать расширения для PHP:
+https://github.com/phper-framework/phper
+https://github.com/davidcole1340/ext-php-rs
+
+
+C#, Java, Go - языки со сборщиком мусора.
+Для разработки высокопроизводительных сервисов есть компилируемый и памятебезопасный язык Rust !
+
+Битрикс24 в восторге от Rust :
+https://www.youtube.com/watch?v=V3ETtDMbmkg
+
+Обгоняет Go ( в 1,5 - 2 раза ) :
+https://www.youtube.com/watch?v=QWLyIBkBrl0
+
+Обгоняет Node.js (Express) в 4 раза :
+https://www.youtube.com/watch?v=5ObNvCMIkPs
+
+На тестах Rust быстрее PHP в 50 раз :
+https://www.youtube.com/watch?v=Vk41-xPxQI4
+
+Почему Discord переписала сервис с Go на Rust.
+https://www.youtube.com/watch?v=viJ92zBa5yc
+
+Тинькофф тоже переписывают сервисы на Rust (! после C++):
+https://hh.ru/vacancy/75758137
+
+Rust строгий и безопастный - выбор ИТ-компаний, и быстрее интерпретируемых языков (Python):
+https://www.youtube.com/watch?v=bEP0YcOyuyE
