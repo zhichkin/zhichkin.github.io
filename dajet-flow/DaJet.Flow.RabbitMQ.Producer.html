@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet.Flow.RabbitMQ.Producer</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td, th { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+
+<h3>DaJet.Flow.RabbitMQ.Producer</h3>
+
+<p>
+Блок-приёмник данных: выполняет запись в топик или очередь RabbitMQ.<br/>
+</p>
+
+<p>
+<b>Тип брокера:</b> RabbitMQ
+</p>
+
+<p>
+<b>Входящий тип данных:</b> <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow-rabbitmq/Message.cs">DaJet.Flow.RabbitMQ.Message</a>
+</p>
+
+<p>
+<b>Исходящий тип данных:</b> НЕТ
+</p>
+
+<p>
+Входящий тип данных можно получить при помощи трансформации типа данных <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/model/Payload.cs">DaJet.Flow.Payload</a>,
+<br/>
+используя блок-трансформатор <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow-rabbitmq/transformers/PayloadToMessageTransformer.cs">DaJet.Flow.RabbitMQ.PayloadToMessageTransformer</a>.
+</p>
+
+<p><b>Настройки блока Producer (подробнее в <a href="https://www.rabbitmq.com/publishers.html">документации VMware</a>):</b></p>
+
+<table style="border: 1px solid black;">
+
+<tr><th>Опция</th><th>Значение</th><th>Пример</th></tr>
+
+<tr><td>Target</td>
+<td>URI сервера и виртуального хоста RabbitMQ</td>
+<td>amqp://guest:guest@localhost:5672/%2F</td></tr>
+
+<tr><td>Exchange</td>
+<td>Имя топика на сервере RabbitMQ для записи сообщений.<br/>
+Если не указано, то опция RoutingKey == имя очереди. </td>
+<td>dajet-topic</td></tr>
+
+<tr><td>RoutingKey</td>
+<td>Имя очереди или ключ маршрутизации (см. опцию Exchange).</td>
+<td>just-for-you</td></tr>
+
+<tr><td>CC</td>
+<td>Дополнительные ключи маршрутизации, которые <b>видны</b> получателям.<br/>
+Указываются через запятую в формате csv. <a href="https://www.rabbitmq.com/sender-selected.html">Подробнее в документации VMware</a></td>
+<td>node-0,node-1,node-2</td></tr>
+
+<tr><td>BCC</td>
+<td>Дополнительные ключи маршрутизации, которые <b>не видны</b> получателям.<br/>
+Указываются через запятую в формате csv. <a href="https://www.rabbitmq.com/sender-selected.html">Подробнее в документации VMware</a></td>
+<td>node-3,node-4,node-5</td></tr>
+
+<tr><td>Mandatory</td>
+<td>Если опция включена (true) а маршрутизация невозможна (нет очереди),<br/>
+то сервер RabbitMQ вернёт такое сообщение назад клиенту с ошибкой.<br/>
+Если опция выключена (false), тогда сообщение будет отброшено<br/>
+сервером RabbitMQ, а клиенту сообщено об успешной доставке.</td>
+<td>false</td></tr>
+
+<tr><td>Sender</td>
+<td>Идентификатор отправителя для заполнения заголовка "AppId".</td>
+<td>trade-main-node</td></tr>
+
+<tr><td>MessageType</td>
+<td>Идентификатор типа сообщения для заполнения заголовка "Type".</td>
+<td>Справочник.Номенклатура</td></tr>
+
+</table>
+
+</body>
+</html>

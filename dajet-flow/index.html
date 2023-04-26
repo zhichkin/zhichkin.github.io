@@ -1,0 +1,111 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet Flow Pipelines ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+<h3>DaJet Flow Pipelines</h3>
+<p>
+Платформа DaJet Flow Pipelines предназначена для гибкой<br/>
+разработки систем интеграции и потоковой обработки данных.
+</p>
+<p>
+При этом роль источника, посредника или получателя данных<br/>
+могут выполнять базы данных СУБД и/или брокеры сообщений.
+</p>
+<p>
+Обработка данных выполняется блоками процессорами или трансформаторами.<br/>
+Отличие этих блоков друг от друга заключается в следующем:<br/>
+- Процессоры не меняют тип входящих данных (исходящий тип тот же).<br/>
+- Трансформаторы меняют входящий тип данных на заданный исходящий.
+</p>
+
+Версия платформы <b>DaJet 2.2.0</b> поддерживает следующие типы узлов обмена:
+<ul>
+<li>PostgreSQL</li>
+<li>Microsoft SQL Server</li>
+<li>RabbitMQ</li>
+<li>Apache Kafka</li>
+</ul>
+
+<img src="https://zhichkin.github.io/dajet-flow/images/dajet-flow-pipelines.png">
+
+<p>
+Подсистема Flow платформы DaJet состоит из конвейеров обработки данных,<br/>
+которые "собираются" из динамически подключаемых компонентов (плагинов).<br/>
+Блоки конвейера программируются на C#, реализуя <a href="https://github.com/zhichkin/dajet/tree/main/src/dajet-flow/model">соответствующие интерфейсы.</a><br/>
+Программная модель аналогична <a href="https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/dataflow-task-parallel-library">Microsoft Dataflow (Task Parallel Library).</a><br/>
+</p>
+
+<img src="https://zhichkin.github.io/dajet-flow/images/dajet-flow-architecture.png">
+
+<p>
+<b>DaJet Flow 2.2.0</b> реализует следующие блоки источников и получателей данных:
+</p>
+
+<table style="border: 1px solid black;">
+
+<tr><td><a href="DaJet.Flow.SqlServer.OneDbSource.html">DaJet.Flow.SqlServer.OneDbSource</a></td>
+<td>Источником данных является запрос к базе данных</br>
+1С:Предприятие 8 на языке DaJet QL (скрипт)</td></tr>
+
+<tr><td><a href="DaJet.Flow.SqlServer.QuerySource.html">DaJet.Flow.SqlServer.QuerySource</a></td>
+<td>Источником данных является запрос к базе данных</br>
+MS SQL Server на диалекте SQL этой СУБД</td></tr>
+
+<tr><td><a href="DaJet.Flow.SqlServer.Producer.html">DaJet.Flow.SqlServer.Producer</a></td>
+<td>Блок выполняет инструкции DML в базе данных</br>
+MS SQL Server на диалекте SQL этой СУБД</td></tr>
+
+<tr><td><a href="DaJet.Flow.PostgreSql.OneDbSource.html">DaJet.Flow.PostgreSql.OneDbSource</a></td>
+<td>Источником данных является запрос к базе данных</br>
+1С:Предприятие 8 на языке DaJet QL (скрипт)</td></tr>
+
+<tr><td><a href="DaJet.Flow.PostgreSql.QuerySource.html">DaJet.Flow.PostgreSql.QuerySource</a></td>
+<td>Источником данных является запрос к базе данных</br>
+PostgreSQL на диалекте SQL этой СУБД</td></tr>
+
+<tr><td><a href="DaJet.Flow.PostgreSql.Producer.html">DaJet.Flow.PostgreSql.Producer</a></td>
+<td>Блок выполняет инструкции DML в базе данных</br>
+PostgreSQL на диалекте SQL этой СУБД</td></tr>
+
+<tr><td><a href="DaJet.Flow.Kafka.Consumer.html">DaJet.Flow.Kafka.Consumer</a></td>
+<td>Блок-потребитель сообщений из топика Apache Kafka</td></tr>
+
+<tr><td><a href="DaJet.Flow.Kafka.Producer.html">DaJet.Flow.Kafka.Producer</a></td>
+<td>Блок-производитель сообщений в топик Apache Kafka</td></tr>
+
+<tr><td><a href="DaJet.Flow.RabbitMQ.Consumer.html">DaJet.Flow.RabbitMQ.Consumer</a></td>
+<td>Блок-потребитель сообщений из очереди RabbitMQ</td></tr>
+
+<tr><td><a href="DaJet.Flow.RabbitMQ.Producer.html">DaJet.Flow.RabbitMQ.Producer</a></td>
+<td>Блок-производитель сообщений в топик или очередь RabbitMQ</td></tr>
+
+</table>
+
+<p>
+<b>DaJet Flow 2.2.0</b> реализует следующие блоки трансформации данных:
+</p>
+
+<table style="border: 1px solid black;">
+
+<tr><td><a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/transformers/RecordToPayloadTransformer.cs">DaJet.Flow.RecordToPayloadTransformer</a></td>
+<td>Выполняет трансформацию записи СУБД в JSON объект.</td></tr>
+
+<tr><td><a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/transformers/PayloadToRecordTransformer.cs">DaJet.Flow.PayloadToRecordTransformer</a></td>
+<td>Выполняет трансформацию JSON объекта в запись СУБД.</td></tr>
+
+<tr><td><a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow-rabbitmq/transformers/PayloadToMessageTransformer.cs">DaJet.Flow.RabbitMQ.PayloadToMessageTransformer</a></td>
+<td>Выполняет трансформацию JSON объекта в сообщение RabbitMQ.</td></tr>
+
+</table>
+
+</body>
+</html>

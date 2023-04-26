@@ -1,0 +1,61 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet.Flow.PostgreSql.OneDbSource</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td, th { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+
+<h3>DaJet.Flow.PostgreSql.OneDbSource</h3>
+
+<p>
+Блок-источник данных, получаемых в результате выполнения<br/>
+запроса к базе данных 1С:Предприятие 8 на языке DaJet QL.<br/>
+</p>
+
+<p>
+<b>Тип СУБД:</b> PostgreSQL
+</p>
+
+<p>
+<b>Входящий тип данных:</b> НЕТ
+</p>
+
+<p>
+<b>Исходящий тип данных:</b> <a href="https://learn.microsoft.com/en-us/dotnet/api/system.data.idatarecord">System.Data.IDataRecord</a>
+</p>
+
+<p>
+Возможна трансформация исходящего типа данных в тип данных <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/model/Payload.cs">DaJet.Flow.Payload</a>
+<br/>
+при помощи блока-трансформатора <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/transformers/RecordToPayloadTransformer.cs">DaJet.Flow.RecordToPayloadTransformer</a>.
+</p>
+
+<p><b>Настройки блока OneDbSource:</b></p>
+
+<table style="border: 1px solid black;">
+
+<tr><th>Опция</th><th>Значение</th><th>Пример</th></tr>
+
+<tr><td>Pipeline</td>
+<td>Идентификатор контекста выполнения<br/>конвейера на сервере DaJet Flow</td>
+<td>8ef2cb0a-1842-483c-9d8f-1af948d60ccf</td></tr>
+
+<tr><td>Source</td>
+<td>Индентификатор базы данных на сервере DaJet</td>
+<td>pg-trade-demo</td></tr>
+
+<tr><td>Script</td>
+<td>Идентификатор скрипта DaJet QL в базе данных,<br/>указанной в опции Source (путь или URL)</td>
+<td>flow/select-products</td></tr>
+
+</table>
+
+</body>
+</html>

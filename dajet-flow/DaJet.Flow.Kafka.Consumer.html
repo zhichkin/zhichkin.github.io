@@ -1,0 +1,80 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet.Flow.Kafka.Consumer</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td, th { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+
+<h3>DaJet.Flow.Kafka.Consumer</h3>
+
+<p>
+Блок-источник данных, получаемых из топика Apache Kafka.<br/>
+</p>
+
+<p>
+<b>Тип брокера:</b> Apache Kafka
+</p>
+
+<p>
+<b>Входящий тип данных:</b> НЕТ
+</p>
+
+<p>
+<b>Исходящий тип данных:</b> <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/model/Payload.cs">DaJet.Flow.Payload</a>
+</p>
+
+<p>
+Возможна трансформация исходящего типа данных в тип данных <a href="https://learn.microsoft.com/en-us/dotnet/api/system.data.idatarecord">System.Data.IDataRecord</a>
+<br/>
+при помощи блока-трансформатора <a href="https://github.com/zhichkin/dajet/blob/main/src/dajet-flow/transformers/PayloadToRecordTransformer.cs">DaJet.Flow.PayloadToRecordTransformer</a>.
+</p>
+
+<p><b>Настройки блока Consumer (подробнее в <a href="https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html">документации Confluent</a>):</b></p>
+
+<table style="border: 1px solid black;">
+
+<tr><th>Опция</th><th>Значение</th><th>Пример</th></tr>
+
+<tr><td>Topic</td>
+<td>Идентификатор топика на сервере Kafka для чтения данных</td>
+<td>dajet-topic</td></tr>
+
+<tr><td>ClientId</td>
+<td>Идентификатор клиента для логирования на сервере Kafka</td>
+<td>dajet-app-1</td></tr>
+
+<tr><td>GroupId</td>
+<td>Индентификатор пользовательской группы на сервере Kafka</td>
+<td>dajet-group</td></tr>
+
+<tr><td>BootstrapServers</td>
+<td>Адрес подключения к кластеру Kafka (обязательно)</td>
+<td>127.0.0.1:9092</td></tr>
+
+<tr><td>AutoOffsetReset</td>
+<td>Стратегия определения оффсета для клиента, если его нет</td>
+<td>earliest</td></tr>
+
+<tr><td>EnableAutoCommit</td>
+<td>Автоматическое фоновое подтверждение клиентского оффсета</td>
+<td>false</td></tr>
+
+<tr><td>SessionTimeoutMs</td>
+<td>Таймаут для определения сервером того, что клиент "живой"</td>
+<td>60000</td></tr>
+
+<tr><td>HeartbeatIntervalMs</td>
+<td>Периодичность отправки сигнала "живой" координатору клиентов</td>
+<td>20000</td></tr>
+
+</table>
+
+</body>
+</html>
