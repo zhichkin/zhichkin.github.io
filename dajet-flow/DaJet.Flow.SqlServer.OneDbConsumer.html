@@ -1,0 +1,67 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet.Flow.SqlServer.OneDbConsumer</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td, th { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+
+<div style="max-width: 750px; margin-left: auto; margin-right: auto;">
+
+<h3>DaJet.Flow.SqlServer.OneDbConsumer</h3>
+
+<p>
+Блок-источник данных, получаемых в результате выполнения запроса к базе данных
+1С:Предприятие 8 при помощи команды CONSUME (деструктивное чтение) языка DaJet QL.
+</p>
+
+<a href="https://zhichkin.github.io/async-data/index.html">
+Подробное описание команды CONSUME и блока OneDbConsumer
+</a>
+
+<p>
+<b>Тип СУБД:</b> Microsoft SQL Server
+</p>
+
+<p>
+<b>Входящий тип данных:</b> НЕТ
+</p>
+
+<p>
+<b>Исходящий тип данных:</b> <a href="https://learn.microsoft.com/en-us/dotnet/api/system.data.idatarecord">System.Data.IDataRecord</a>
+</p>
+
+<p><b>Настройки блока OneDbConsumer:</b></p>
+
+<table style="border: 1px solid black;">
+
+<tr><th>Опция</th><th>Значение</th><th>Пример</th></tr>
+
+<tr><td>Pipeline</td>
+<td>Идентификатор контекста выполнения<br/>конвейера на сервере DaJet Flow</td>
+<td>8ef2cb0a-1842-483c-9d8f-1af948d60ccf</td></tr>
+
+<tr><td>Source</td>
+<td>Индентификатор базы данных на сервере DaJet</td>
+<td>ms-trade-demo</td></tr>
+
+<tr><td>Script</td>
+<td>Идентификатор скрипта DaJet QL в базе данных,<br/>указанной в опции Source (путь или URL)</td>
+<td>flow/select-products</td></tr>
+
+<tr><td>Timeout</td>
+<td>Таймаут выполнения запроса СУБД в секундах</td>
+<td>5</td></tr>
+
+</table>
+
+</div>
+
+</body>
+</html>
