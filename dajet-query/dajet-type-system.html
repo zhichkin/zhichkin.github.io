@@ -1,0 +1,241 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+</style>
+<body>
+
+<div style="max-width: 555px; margin-left: auto; margin-right: auto;">
+
+<h3>Система типов данных языка запросов DaJet</h3>
+
+<a href="https://zhichkin.github.io/data-provider/main.html">Документация для программистов C#</a>
+
+<p>
+Язык запросов DaJet основан на системе типов 1С:Предприятие 8.
+Кроме простых типов данных DaJet так же поддерживает такие специфичные
+для этой платформы типы, как <b>Ссылка</b> (Entity) и <b>СоставнойТип</b> (Union).
+</p>
+
+<table>
+  <tr>
+    <td><b>1С</b></td>
+    <td><b>DaJet</b></td>
+    <td><b>C#</b></td>
+    <td><b>MS SQL Server</b></td>
+    <td><b>PostgreSQL</b></td>
+  </tr>
+  <tr>
+    <td>Неопределено</td>
+    <td>null</td>
+    <td>null</td>
+    <td>NULL</td>
+    <td>NULL</td>
+  </tr>
+  <tr>
+    <td>Булево</td>
+    <td>boolean</td>
+    <td>bool</td>
+    <td>binary(1)</td>
+    <td>boolean</td>
+  </tr>
+  <tr>
+    <td>Число</td>
+    <td>number</td>
+    <td>decimal</td>
+    <td>numeric</td>
+    <td>numeric</td>
+  </tr>
+  <tr>
+    <td>Дата</td>
+    <td>datetime</td>
+    <td>DateTime</td>
+    <td>datetime2</td>
+    <td>timestamp without time zone</td>
+  </tr>
+  <tr>
+    <td>Строка</td>
+    <td>string</td>
+    <td>string</td>
+    <td>nvarchar</td>
+    <td>mvarchar</td>
+  </tr>
+  <tr>
+    <td>Ссылка</td>
+    <td>entity</td>
+    <td>Entity</td>
+    <td>binary(16)</td>
+    <td>bytea</td>
+  </tr>
+  <tr>
+    <td>Составной тип</td>
+    <td>oneof</td>
+    <td>Union</td>
+    <td>Все выше перечисленные</td>
+    <td>Все выше перечисленные</td>
+  </tr>
+  <tr>
+    <td>Уникальный идентификатор</td>
+    <td>uuid</td>
+    <td>Guid</td>
+    <td>binary(16)</td>
+    <td>bytea</td>
+  </tr>
+  <tr>
+    <td>Бинарные данные</td>
+    <td>binary</td>
+    <td>byte[]</td>
+    <td>varbinary(max)</td>
+    <td>bytea</td>
+  </tr>
+</table>
+
+<h3>Тип данных "Ссылка" (Entity)</h3>
+
+<p>
+Entity - это структура данных, которая состоит из одного или двух полей.
+Данная структура является своеобразным указателем (ссылкой) на объект в базе данных.
+</p>
+
+<p>
+Структура Entity может иметь <b>пустое значение</b>, то есть не указывать на какой-то
+конкретный объект базы данных. В таком случае значением этой структуры будет нулевой UUID.
+</p>
+
+<table>
+  <tr>
+    <td><b>1С</b></td>
+    <td><b>DaJet</b></td>
+    <td><b>C#</b></td>
+    <td><b>MS SQL Server</b></td>
+    <td><b>PostgreSQL</b></td>
+    <td><b>Поле СУБД</b></td>
+  </tr>
+  <tr>
+    <td>Код типа<br/>type code</td>
+    <td>number</td>
+    <td>int</td>
+    <td>binary(4)</td>
+    <td>bytea</td>
+    <td>1. _Fld123_TRef<br/>2. Не используется</td>
+  </tr>
+  <tr>
+    <td>Ссылка<br/>reference</td>
+    <td>uuid</td>
+    <td>Guid</td>
+    <td>binary(16)</td>
+    <td>bytea</td>
+    <td>1. _Fld123_RRef<br/>2. _Fld123RRef</td>
+  </tr>
+</table>
+
+<p>
+Как видно из таблицы выше, в базе данных 1С:Предприятие 8 структура "Ссылка" -
+это комбинация полей, имеющих постфиксы <b>TRef</b> (код типа) и <b>RRef</b>
+(идентификатор объекта).
+</p>
+
+<p>
+При этом в некоторых случаях постфикс <b>TRef</b> в целях оптимизации
+на уровне СУБД может отсутствовать ("Поле СУБД", вариант № 2).
+</p>
+
+<p>
+Язык запросов DaJet все эти случаи учитывает и делает работу с этим типом данных прозрачной.
+</p>
+
+<h3>Тип данных "СоставнойТип" (Union)</h3>
+
+<p>
+Union - это структура данных, которая может состоять из нескольких полей на уровне
+базы данных. По сути своей, тип Union является реализацией классического типа данных
+<b>tagged union</b> или, другая аналогия, типа данных <b>sql_variant</b> MS SQL Server.
+<p>
+Одно поле структуры - дискриминатор (tag), который указывает на конкретный тип
+данных значения, хранимого структурой в данный момент (текущее значение).
+Остальные поля используются для хранения значений конкретного типа,
+определённого дискриминатором. Некоторые поля, в целях оптимизации на уровне СУБД,
+а также в зависимости от настроек конфигурации 1С:Предлприятие 8, могут отсутствовать.
+Кроме этого, структура Union, так же как и Entity, может иметь пустое значение (NULL).
+</p>
+
+<table>
+  <tr>
+    <td><b>1С</b></td>
+    <td><b>DaJet</b></td>
+    <td><b>C#</b></td>
+    <td><b>MS SQL Server</b></td>
+    <td><b>PostgreSQL</b></td>
+    <td><b>Поле СУБД<br/>(постфикс)</b></td>
+  </tr>
+  <tr>
+    <td>Дискриминатор</td>
+    <td>number</td>
+    <td>byte</td>
+    <td>binary(1)</td>
+    <td>bytea</td>
+    <td>_TYPE</td>
+  </tr>
+  <tr>
+    <td>Булево</td>
+    <td>boolean</td>
+    <td>bool</td>
+    <td>binary(1)</td>
+    <td>boolean</td>
+    <td>_L</td>
+  </tr>
+  <tr>
+    <td>Число</td>
+    <td>number</td>
+    <td>decimal</td>
+    <td>numeric</td>
+    <td>numeric</td>
+    <td>_N</td>
+  </tr>
+  <tr>
+    <td>Дата</td>
+    <td>datetime</td>
+    <td>DateTime</td>
+    <td>datetime2</td>
+    <td>timestamp without time zone</td>
+    <td>_T</td>
+  </tr>
+  <tr>
+    <td>Строка</td>
+    <td>string</td>
+    <td>string</td>
+    <td>nvarchar</td>
+    <td>mvarchar</td>
+    <td>_S</td>
+  </tr>
+  <tr>
+    <td>Код типа</td>
+    <td>number</td>
+    <td>int</td>
+    <td>binary(4)</td>
+    <td>bytea</td>
+    <td>_RTRef</td>
+  </tr>
+  <tr>
+    <td>Ссылка</td>
+    <td>uuid</td>
+    <td>Guid</td>
+    <td>binary(16)</td>
+    <td>bytea</td>
+    <td>_RRRef</td>
+  </tr>
+</table>
+
+</div>
+
+</body>
+</html>

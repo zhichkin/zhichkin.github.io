@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Команда SELECT и параметры запросов</a></h3>
+
+<p>
+Команда SELECT языка запросов DaJet аналогична соответсвующей команде SQL.
+При этом в командах могут использоваться параметры запроса так, как это показано
+в примере ниже (параметр объявляется при помощи ключевого слова DECLARE).
+</p>
+
+<p>
+<b>Пример команды "СрезПоследних" для регистра сведений "КурсыВалют":</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@ДатаСреза</i> <b>datetime</b> = '2021-07-31T23:59:59';<br/>
+<span class="code">DECLARE</span> <i>@Валюта</i> <b>Справочник.Валюты</b> = '150036b4-2fe9-0228-11df-720f9c556d4d';<br/>
+<br/>
+<span class="code">SELECT</span><br/>
+&nbsp;&nbsp;СрезПоследних.Период <span class="code">AS</span> Период,<br/>
+&nbsp;&nbsp;КурсыВалют.Валюта&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Валюта,<br/>
+&nbsp;&nbsp;КурсыВалют.Курс&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Курс,<br/>
+&nbsp;&nbsp;КурсыВалют.Кратность <span class="code">AS</span> Кратность<br/>
+<br/>
+<span class="code">FROM</span> (<span class="code">SELECT</span> Валюта, <span class="code">MAX</span>(Период) <span class="code">AS</span> Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрСведений.КурсыВалют</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Валюта = <i>@Валюта</i><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span> Период <= <i>@ДатаСреза</i><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">GROUP BY</span> Валюта) <span class="code">AS</span> СрезПоследних<br/>
+<br/>
+<span class="code">INNER JOIN</span> <b>РегистрСведений.КурсыВалют</b> <span class="code">AS</span> КурсыВалют<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> КурсыВалют.Период = СрезПоследних.Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span> КурсыВалют.Валюта = СрезПоследних.Валюта<br/>
+</p>
+
+<p>
+<b>Пример использования оператора UNION и перечислений 1С:Предприятие 8:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">SELECT</span> Код, Наименование, СтавкаНДС<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b><br/>
+&nbsp;<span class="code">WHERE</span> СтавкаНДС = <b>Перечисление.СтавкиНДС.НДС10</b><br/>
+<br/>
+<span class="code">UNION ALL</span><br/>
+<br/>
+<span class="code">SELECT</span> Код, Наименование, СтавкаНДС<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> Справочник.Номенклатура</b><br/>
+&nbsp;<span class="code">WHERE</span> СтавкаНДС = <b>Перечисление.СтавкиНДС.НДС18</b><br/>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">SELECT</span> 'НДС 10%' <span class="code">AS</span> Name, <b>Перечисление.СтавкиНДС.НДС10</b> <span class="code">AS</span> Value<br/>
+<span class="code">UNION ALL</span><br/>
+<span class="code">SELECT</span> 'НДС 18%', <b>Перечисление.СтавкиНДС.НДС18</b><br/>
+<span class="code">UNION ALL</span><br/>
+<span class="code">SELECT</span> 'Без НДС', <b>Перечисление.СтавкиНДС.БезНДС</b><br/>
+<br/>
+<table>
+<tr><td><b>Name</b></td><td><b>Value</b></td></tr>
+<tr><td><b>НДС 10%</b></td><td><b>d0d192a2-e8ae-72f0-45d0-62c1b99522a7</b></td></tr>
+<tr><td><b>НДС 18%</b></td><td><b>93e8f7aa-e0ce-1fcd-48a8-76b826b5ef6b</b></td></tr>
+<tr><td><b>Без НДС</b></td><td><b>5dc678af-171c-41ad-4e88-46212489abf1</b></td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>

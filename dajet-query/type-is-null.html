@@ -1,0 +1,121 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Составные поля и типы в запросах</a></h3>
+
+<p>
+Для проверки типов составных полей язык запросов DaJet реализует оператор
+сравнения типов данных <b>IS</b>. Этот же оператор используется для
+сравнения на равенство значению <b>NULL</b>.
+</p>
+
+<p>
+Кроме этого реализована функция <b>ISNULL</b>(<i>значение1</i>, <i>значение2</i>), где
+<ul>
+<li><i>значение1</i> - значение, проверяемое на равенство значению NULL</li>
+<li><i>значение2</i> - значение, возвращаемое если <i>значение1</i> является NULL</li>
+</ul>
+Если <i>значение1</i> является NULL, то функция возвращает <i>значение2</i>,
+иначе - <i>значение1</i>.
+</p>
+
+<p>
+Для определения кода ссылочного типа и его уникального идентификатора реализованы функции
+<b>TYPEOF</b> и <b>UUIDOF</b> соответственно.
+</p>
+
+<p>
+<b>Пример проверки результата левого соединения на значение NULL:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span><br/>
+&nbsp;<span class="code">DISTINCT</span> Валюта.Код, Валюта.Наименование<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Валюты</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Валюта<br/>
+<span class="code">LEFT JOIN</span> <b>РегистрСведений.КурсыВалют</b> <span class="code">AS</span> КурсыВалют<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Валюта.Ссылка = КурсыВалют.Валюта<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> КурсыВалют.Валюта <span class="code">IS NOT NULL</span><br/>
+</p>
+
+<p>
+<b>Пример использования функции ISNULL:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> Валюта.Код&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Код,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Валюта.Наименование&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Имя,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ISNULL</span>(КурсыВалют.Курс,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0000) <span class="code">AS</span> Курс,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ISNULL</span>(КурсыВалют.Период, '0001-01-01T00:00:00') <span class="code">AS</span> Дата<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Валюты</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Валюта<br/>
+<span class="code">LEFT JOIN</span> <b>РегистрСведений.КурсыВалют</b> <span class="code">AS</span> КурсыВалют<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Валюта.Ссылка = КурсыВалют.Валюта<br/>
+&nbsp;<span class="code">ORDER BY</span> Валюта.Код <span class="code">ASC</span>, КурсыВалют.Период <span class="code">ASC</span><br/>
+</p>
+
+<p>
+<b>Пример сравнения типов ссылочных данных составного поля (оператор IS):</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">SELECT</span> Движения.Период,<br/>
+&nbsp;&nbsp;<span class="code">CASE</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">WHEN</span> Движения.Регистратор <span class="code">IS</span> <b>Документ.ПоступлениеТоваровУслуг</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span> Поступление.Номер<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">WHEN</span> Движения.Регистратор <span class="code">IS</span> <b>Документ.РеализацияТоваровУслуг</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span> Реализация.Номер<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ELSE</span> ''<br/>
+&nbsp;&nbsp;<span class="code">END AS</span> НомерДокумента<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ТоварыНаСкладах</b> <span class="code">AS</span> Движения<br/>
+<br/>
+<span class="code">LEFT JOIN</span> <b>Документ.ПоступлениеТоваровУслуг</b> <span class="code">AS</span> Поступление<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Движения.Регистратор = Поступление.Ссылка<br/>
+<br/>
+<span class="code">LEFT JOIN</span> <b>Документ.РеализацияТоваровУслуг</b> <span class="code">AS</span> Реализация<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Движения.Регистратор = Реализация.Ссылка<br/>
+<br/>
+<span class="code">WHERE</span> Движения.Регистратор <span class="code">IS</span> <b>Документ.ПоступлениеТоваровУслуг</b><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">OR</span> Движения.Регистратор <span class="code">IS</span> <b>Документ.РеализацияТоваровУслуг</b><br/>
+</p>
+
+<p>
+<b>Пример использования функций TYPEOF и UUIDOF:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+&nbsp;&nbsp;<span class="code">SELECT</span> Регистратор,<br/>
+&nbsp;&nbsp;<span class="code">TYPEOF</span>(Регистратор) <span class="code">AS</span> type,<br/>
+&nbsp;&nbsp;<span class="code">UUIDOF</span>(Регистратор) <span class="code">AS</span> uuid<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ОстаткиТовара</b><br/>
+<span class="code">ORDER BY TYPEOF</span>(Регистратор) <span class="code">ASC</span><br/>
+<br/>
+
+<table>
+<tr><td><b>Регистратор</b></td><td><b>type</b></td><td><b>uuid</b></td></tr>
+<tr><td>{852:8d40e09c-935c-8ecc-11ed-71076402f3b2}</td><td>852</td><td>8d40e09c-935c-8ecc-11ed-71076402f3b2</td></tr>
+<tr><td>{852:8d40e09c-935c-8ecc-11ed-71076402f3b2}</td><td>852</td><td>8d40e09c-935c-8ecc-11ed-71076402f3b2</td></tr>
+<tr><td>{852:8d40e09c-935c-8ecc-11ed-71076402f3b2}</td><td>852</td><td>8d40e09c-935c-8ecc-11ed-71076402f3b2</td></tr>
+<tr><td>{853:8d40e29c-935c-8ecc-11ed-9d1c03cae1ec}</td><td>853</td><td>8d40e29c-935c-8ecc-11ed-9d1c03cae1ec</td></tr>
+</table>
+
+</p>
+
+</div>
+
+</body>
+</html>
