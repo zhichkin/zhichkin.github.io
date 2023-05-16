@@ -1,0 +1,140 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Общие табличные выражения</a></h3>
+
+<p>
+Общие табличные выражения в языке запросов DaJet реализованы аналогично стандарту SQL.
+Исключением является только синтаксис, который был изменён в целях его унификации
+относительно синтаксиса создания временных таблиц.
+</p>
+
+<p>
+Главное отличие общих табличных выражений от временных таблиц заключается в том,
+что они "вычисляются" в момент обращения к ним из тела запроса SQL. В этом смысле их
+использование аналогично использованию представлений (view),
+объявленных в тексте запроса (inline view).
+</p>
+
+<p>
+Общие табличные выражения могут ссылаться друг на друга и на самих себя.
+В последнем случае (ссылка на саму себя) реализуется механизм рекурсивного запроса.
+</p>
+
+<p>
+Общие табличные выражения DaJet могут использоваться совместно с командами
+SELECT, INSERT, UPDATE и UPSERT, играя роль источника данных для основной команды.
+Использование в составе команды DELETE находится в разработке.
+</p>
+
+<p>
+<b>Пример использования общего табличного выражения:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@ДатаОстатка</i> <b>datetime</b> = '2014-12-31T23:59:59';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> Остатки <span class="code">AS</span><span class="comment"> -- Общее табличное выражение</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> Период, Номенклатура,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SUM</span>(<span class="code">CASE WHEN</span> ВидДвижения = 0<span class="comment"> -- Приход</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span>&nbsp;&nbsp;ВНаличии<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ELSE</span> -ВНаличии <span class="code">END</span>) <span class="code">AS</span> Сумма<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ТоварыНаСкладах</b><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Период <= <i>@ДатаОстатка</i><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">GROUP BY</span> Период, Номенклатура<br/>
+&nbsp;&nbsp;<span class="code">HAVING SUM</span>(<span class="code">CASE WHEN</span> ВидДвижения = 0<span class="comment"> -- Приход</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span>&nbsp;&nbsp;ВНаличии<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ELSE</span> -ВНаличии <span class="code">END</span>) >= 50<br/>
+)<br/>
+<span class="comment">-- Тело основного запроса</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> Период, Товар.Наименование, Сумма<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> Остатки<br/>
+<span class="code">INNER JOIN</span> <b>Справочник.Номенклатура</b> <span class="code">AS</span> Товар<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Остатки.Номенклатура = Товар.Ссылка<br/>
+</p>
+
+<b>Пример ссылки одного общего табличного выражения на другое:</b>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@ДатаСреза</i> <b>datetime</b> = '2021-07-31T23:59:59';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> СрезПоследних <span class="code">AS</span><span class="comment"> -- Общее табличное выражение</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> Валюта, <span class="code">MAX</span>(Период) <span class="code">AS</span> Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрСведений.КурсыВалют</b><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Период <= <i>@ДатаСреза</i><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">GROUP BY</span> Валюта<br/>
+),<br/>
+КурсыВалютНаДату <span class="code">AS</span><span class="comment"> -- Общее табличное выражение</span><br/>
+(<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> СрезПоследних.Период <span class="code">AS</span> ДатаКурса,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;КурсыВалют.Валюта,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;КурсыВалют.Курс,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;КурсыВалют.Кратность<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> СрезПоследних<br/>
+&nbsp;&nbsp;<span class="code">INNER JOIN</span> <b>РегистрСведений.КурсыВалют</b> <span class="code">AS</span> КурсыВалют<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> КурсыВалют.Период = СрезПоследних.Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span> КурсыВалют.Валюта = СрезПоследних.Валюта<br/>
+)<br/>
+<span class="comment">-- Тело основного запроса</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> ДатаКурса, Валюта.Наименование, Курс, Кратность<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> КурсыВалютНаДату&nbsp;&nbsp;<span class="code">AS</span> Курсы<br/>
+<span class="code">INNER JOIN</span> <b>Справочник.Валюты</b> <span class="code">AS</span> Валюта<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Курсы.Валюта = Валюта.Ссылка<br/>
+</p>
+
+<b>Пример рекурсивного общего табличного выражения:</b>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@КодГруппы</i> <b>string</b> = 'MS-10';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> РекурсивныйЗапрос <span class="code">AS</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> 0 <span class="code">AS</span> Уровень,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Код <span class="code">AS</span> Группа,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ссылка, Наименование, Код <span class="code">AS</span> Товар<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Код = <i>@КодГруппы</i><span class="comment"> -- Корневая группа</span><br/>
+<br/>
+&nbsp;&nbsp;&nbsp;<span class="code">UNION ALL</span><br/>
+<br/>
+&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> parent.Уровень + 1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent.Товар,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ссылка, child.Наименование, child.Код<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b> <span class="code">AS</span> child<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">INNER JOIN</span>&nbsp;&nbsp;РекурсивныйЗапрос <span class="code">AS</span> parent<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> parent.Ссылка = child.Родитель<br/>
+)<br/>
+<span class="code">SELECT</span> Уровень, Группа, Товар, Наименование<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> РекурсивныйЗапрос<br/>
+&nbsp;<span class="code">ORDER BY</span> Уровень, Группа, Товар<br/>
+<br/>
+<table>
+<tr><td><b>Уровень</b></td><td><b>Группа</b></td><td><b>Товар</b></td><td><b>Наименование</b></td></tr>
+<tr><td>0</td><td>MS-10</td><td>MS-10</td><td>MS-10</td></tr>
+<tr><td>1</td><td>MS-10</td><td>MS-04</td><td>Товар 04</td></tr>
+<tr><td>1</td><td>MS-10</td><td>MS-11</td><td>MS-11</td></tr>
+<tr><td>2</td><td>MS-11</td><td>MS-05</td><td>Товар 05</td></tr>
+<tr><td>2</td><td>MS-11</td><td>MS-06</td><td>Товар 06</td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>
