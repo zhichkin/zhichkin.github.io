@@ -1,0 +1,74 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Выборка изменений из планов обмена</a></h3>
+
+<p>
+Платформа 1С:Предприятие 8 имеет штатный механизм захвата изменений данных своих объектов.
+Эта подсистема реализуется в рамках платформы при помощи объектов "План обмена".
+Данный механизм аналогичен по своему назначению захвату изменений данных
+(change data capture) классических СУБД. Однако, более точной аналогией будет механизм
+отслеживания изменений (change tracking) MS SQL Server, так как планы обмена 1С регистрируют
+только уникальные ключи изменённых объектов без их данных.
+</p>
+
+<p><a href="https://infostart.ru/1c/articles/899200/">Подробное исследование и описание работы планов обмена 1С</a></p>
+
+<p>
+Язык запросов DaJet реализует возможность обращения к таблицам регистрации изменений
+объектов 1С. Идентификатором такой таблицы является полное наименование объекта 1С,
+дополненное служебным словом "Изменения".
+</p>
+
+<p>
+Пример ниже демонстрирует запрос получения изменений справочника "Номенклатура"
+из плана обмена "ПланОбменаDWH" для узла обмена (подписчика) с кодом "DWH-01".
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">SELECT TOP</span> 10<br/>
+&nbsp;&nbsp;ПланОбмена.Код&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Получатель,<br/>
+&nbsp;&nbsp;Данные.Ссылка&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Товар,<br/>
+&nbsp;&nbsp;Данные.Код&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AS</span> КодТовара,<br/>
+&nbsp;&nbsp;Данные.Наименование <span class="code">AS</span> Наименование<br/>
+<br/>
+<span class="comment">-- Таблица регистрации изменений</span><br/>
+<span class="code">FROM</span> <b>Справочник.Номенклатура.Изменения</b> <span class="code">AS</span> Изменения<br/>
+<br/>
+<span class="comment">-- Таблица плана обмена - список подписчиков</span><br/>
+<span class="code">INNER JOIN</span> <b>ПланОбмена.ПланОбменаDWH</b> <span class="code">AS</span> ПланОбмена<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Изменения.УзелОбмена = ПланОбмена.Ссылка<br/>
+<br/>
+<span class="comment">-- Основная таблица данных</span><br/>
+&nbsp;<span class="code">LEFT JOIN</span> <b>Справочник.Номенклатура</b> <span class="code">AS</span> Данные<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Изменения.Ссылка = Данные.Ссылка<br/>
+<br/>
+<span class="code">WHERE</span> ПланОбмена.Код = 'DWH-01'<br/>
+<br/>
+<table>
+<tr><td><b>Получатель</b></td><td><b>Ссылка</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>DWH-01</td><td>{215:150015af-b8e9-8dc4-11e0-50911643ef2e}</td><td>ЦБ-0022</td><td>Товар 22</td></tr>
+<tr><td>DWH-01</td><td>{215:150015af-b8e9-8dc4-11e0-50911643ef32}</td><td>ЦБ-0033</td><td>Товар 33</td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>
