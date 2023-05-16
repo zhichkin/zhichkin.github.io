@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Постраничная выборка данных (paging)</a></h3>
+
+<p>
+Нижеследующий пример постраничной выборки данных демонстрирует следующую
+логику выполнения запроса (выбирается "страница" записей 4-7):
+<ul>
+<li>SELECT - Выборка выполняется из справочника "Номенклатура"</li>
+<li>ORDER&nbsp;&nbsp;- Выбранные записи сортируются по реквизиту "Код"</li>
+<li>OFFSET - Первые три, из выбранных по порядку, записи отбрасываются</li>
+<li>FETCH&nbsp;&nbsp;- Выбираются следующие четыре записи после пропущенных трёх</li>
+</ul>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> Ссылка, Код, Наименование<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b><br/>
+&nbsp;&nbsp;<span class="code">ORDER BY</span> Код <span class="code">ASC</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">OFFSET</span> 3 <span class="code">ROWS</span><br/>
+<span class="code">FETCH NEXT</span> 4 <span class="code">ROWS ONLY</span><br/>
+<br/>
+<table>
+<tr><td><b>Ссылка</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>{845:8d40de9c-935c-8ecc-11ed-613d88568990}</td><td>PG-04</td><td>Товар 04</td></tr>
+<tr><td>{845:8d40de9c-935c-8ecc-11ed-613d987b0651}</td><td>PG-05</td><td>Товар 05</td></tr>
+<tr><td>{845:8d40de9c-935c-8ecc-11ed-6145f62981ce}</td><td>PG-06</td><td>Товар 06</td></tr>
+<tr><td>{845:8d40e29c-935c-8ecc-11ed-9ab0e7765aec}</td><td>PG-07</td><td>Товар 07</td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>
