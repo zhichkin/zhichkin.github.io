@@ -1,0 +1,78 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Оконные функции (window functions)</a></h3>
+
+<p>
+Оконные функции в языке запросов DaJet реализованы как в обычном SQL.
+Подробную документацию по их использованию можно посмотреть в соответствующих
+руководствах по языку запросов MS SQL Server или PostgreSQL.
+</p>
+
+<p><b>Пример вычисления нарастающего итога SUM(...) OVER(...):</b></p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@НачалоПериода</i> <b>datetime</b> = '2015-01-01T00:00:00';<br/>
+<span class="code">DECLARE</span> <i>@КонецПериода</i>  <b>datetime</b> = '2015-03-31T23:59:59';<br/>
+<span class="code">DECLARE</span> <i>@Товар</i> <b>Справочник.Номенклатура</b> = '11008a84-432f-9a52-11d9-55bcdee6e16b';<br/>
+<br/>
+<span class="code">SELECT</span><br/>
+&nbsp;&nbsp;Период,<br/>
+&nbsp;&nbsp;Номенклатура,<br/>
+&nbsp;&nbsp;<span class="code">CASE WHEN</span> ВидДвижения = 0 <span class="code">THEN</span> 'Приход' <span class="code">ELSE</span> 'Расход' <span class="code">END AS</span> ВидДвижения,<br/>
+&nbsp;&nbsp;ВНаличии <span class="code">AS</span> Количество,<br/>
+&nbsp;&nbsp;<span class="code">SUM</span>(<span class="code">CASE WHEN</span> ВидДвижения = 0 <span class="code">THEN</span> ВНаличии <span class="code">ELSE</span> -ВНаличии <span class="code">END</span>)<br/>
+&nbsp;&nbsp;<span class="code">OVER</span>(<span class="code">ORDER BY</span> Период <span class="code">ROWS UNBOUNDED PRECEDING</span>) <span class="code">AS</span> Итого<br/>
+<br/>
+&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ТоварыНаСкладах</b><br/>
+<span class="code">WHERE</span> Номенклатура = <i>@Товар</i><br/>
+&nbsp;&nbsp;<span class="code">AND</span> Период >= <i>@НачалоПериода</i><br/>
+&nbsp;&nbsp;<span class="code">AND</span> Период <= <i>@КонецПериода</i><br/>
+<br/>
+<table>
+<tr><td><b>Период</b></td><td><b>Номенклатура</b></td><td><b>ВидДвижения</b></td><td><b>Количество</b></td><td><b>Итого</b></td></tr>
+<tr><td>2015-03-02T11:57:12</td><td>{215:11008a84-432f-9a52-11d9-55bcdee6e16b}</td><td>Приход</td><td>16.000</td><td>16.000</td></tr>
+<tr><td>2015-03-02T15:27:11</td><td>{215:11008a84-432f-9a52-11d9-55bcdee6e16b}</td><td>Расход</td><td>10.000</td><td>6.000</td></tr>
+</table>
+</p>
+
+<p><b>Пример нумерации результата запроса по порядку ROW_NUMBER() OVER(...):</b></p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">SELECT</span><br/>
+&nbsp;&nbsp;<span class="code">ROW_NUMBER</span>() <span class="code">OVER</span>(<span class="code">ORDER BY</span> Код <span class="code">DESC</span>) <span class="code">AS</span> No,<br/>
+&nbsp;&nbsp;Код,<br/>
+&nbsp;&nbsp;Наименование<br/>
+<span class="code">FROM</span><br/>
+&nbsp;&nbsp;<b>Справочник.Номенклатура</b><br/>
+<br/>
+<table>
+<tr><td><b>No</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>1</td><td>MS-05</td><td>Товар 05</td></tr>
+<tr><td>2</td><td>MS-04</td><td>Товар 04</td></tr>
+<tr><td>3</td><td>MS-03</td><td>Товар 03</td></tr>
+<tr><td>4</td><td>MS-02</td><td>Товар 02</td></tr>
+<tr><td>5</td><td>MS-01</td><td>Товар 01</td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>
