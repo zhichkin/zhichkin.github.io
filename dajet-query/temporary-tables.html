@@ -1,0 +1,129 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Временные таблицы</a></h3>
+
+<p>
+Временные таблицы в языке запрпосов DaJet можно создать только из выборки
+при помощи команды SELECT. Для MS SQL Server возможно создание табличных
+переменных (смотри пример ниже). Синтаксис создания табличных переменных
+для базы данных PostgreSQL будет интерпретирован как создание обычной
+временной таблицы.
+</p>
+
+<p>
+Особенности использования табличных переменных MS SQL Server следует смотреть
+в документации Microsoft по соответствующему продукту. Здесь же коротко отметим,
+что табличные перемнные также, как и времнные таблицы, используют tempdb,
+но при этом их использование не создаёт нагрузки на журнал транзакций, а,
+следовательно, данные в табличных переменных не защищены транзакционными
+механизмами, то есть в случае отката транзакции данные табличной переменной
+не восстанавливаются в том состоянии, в котором они были до начала этой транзакции.
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="comment">-- Создание временной таблицы</span><br/>
+<br/>
+<span class="code">CREATE TEMPORARY TABLE</span> ИмяВременнойТаблицы <span class="code">AS</span> ...<br/>
+<br/>
+<span class="comment">-- Создание табличной переменной</span><br/>
+<br/>
+<span class="code">CREATE TABLE VARIABLE</span> ИмяТабличнойПеременной <span class="code">AS</span> ...<br/>
+</p>
+
+<p>
+По отношению к временным таблицам и табличным переменным возможно применение команд DML,
+а именно INSERT, UPDATE, DELETE. Например, временную таблицу можно очистить следующим
+образом:
+</p>
+<p style="padding: 10px; background: lightgrey;">
+<span class="comment">-- Полная очистка</span><br/>
+<span class="code">DELETE</span> ВременнаяТаблица<br/>
+<br/>
+<span class="comment">-- Частичная очистка по условию</span><br/>
+<span class="code">DELETE</span> ВременнаяТаблица <span class="code">WHERE</span> СуммаОстатка > 100
+</p>
+
+<p>
+<b>Пример создания и использования временной таблицы:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@ДатаСреза</i> <b>datetime</b> = '2021-07-31T23:59:59';<br/>
+<span class="code">DECLARE</span> <i>@Рубль</i> <b>Справочник.Валюты</b> = '9c556d4d-720f-11df-b436-0015e92f2802';<br/>
+<span class="code">DECLARE</span> <i>@Оптовая</i> <b>Справочник.ВидыЦен</b> = '73867e74-73c8-11df-b338-0011955cba6b';<br/>
+<br/>
+<span class="code">CREATE TEMPORARY TABLE</span> АктуальныеЦены <span class="code">AS</span><span class="comment"> -- Временная таблица</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> Товар.Ссылка, Товар.Код, Товар.Наименование, Товар.СтавкаНДС,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;АктуальныйПериод.Период, ЦенаТовара.Цена, ЦенаТовара.ВидЦены<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b> <span class="code">AS</span> Товар<br/>
+<br/>
+&nbsp;&nbsp;<span class="code">INNER JOIN</span> (<span class="code">SELECT</span> Номенклатура, <span class="code">MAX</span>(Период) <span class="code">AS</span> Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрСведений.ЦеныНоменклатуры</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Валюта&nbsp;&nbsp;= <i>@Рубль</i><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span> Период <= <i>@ДатаСреза</i><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">GROUP BY</span> Номенклатура) <span class="code">AS</span> АктуальныйПериод<br/>
+<br/>
+&nbsp;&nbsp;<span class="code">ON</span> Товар.Ссылка = АктуальныйПериод.Номенклатура<br/>
+<br/>
+&nbsp;&nbsp;<span class="code">INNER JOIN</span> <b>РегистрСведений.ЦеныНоменклатуры</b> <span class="code">AS</span> ЦенаТовара<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> ЦенаТовара.Период&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= АктуальныйПериод.Период<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span> ЦенаТовара.Номенклатура = АктуальныйПериод.Номенклатура<br/>
+<br/>
+&nbsp;&nbsp;<span class="code">WHERE</span> ЦенаТовара.ВидЦены = <i>@Оптовая</i> <span class="code">AND</span> ЦенаТовара.Цена > 0<br/>
+)<br/>
+<span class="comment">-- Конец объявления и создания временной таблицы</span><br/>
+<br/>
+<span class="code">SELECT</span> АЦ.Ссылка, АЦ.Код, АЦ.Наименование,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;АЦ.СтавкаНДС, АЦ.Период, АЦ.Цена, АЦ.ВидЦены<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> АктуальныеЦены <span class="code">AS</span> АЦ<br/>
+</p>
+
+<b>Пример создания и использования табличной переменной:</b>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@ДатаОстатка</i> <b>datetime</b> = '2014-12-31T23:59:59';<br/>
+<br/>
+<span class="code">CREATE TABLE VARIABLE</span> Остатки <span class="code">AS</span><span class="comment"> -- Табличная переменная</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> Период, Номенклатура,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SUM</span>(<span class="code">CASE WHEN</span> ВидДвижения = 0<span class="comment"> -- Приход</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span>&nbsp;&nbsp;ВНаличии<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ELSE</span> -ВНаличии <span class="code">END</span>) <span class="code">AS</span> Сумма<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ТоварыНаСкладах</b><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">WHERE</span> Период <= <i>@ДатаОстатка</i><br/>
+&nbsp;&nbsp;&nbsp;<span class="code">GROUP BY</span> Период, Номенклатура<br/>
+&nbsp;&nbsp;<span class="code">HAVING SUM</span>(<span class="code">CASE WHEN</span> ВидДвижения = 0<span class="comment"> -- Приход</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">THEN</span>&nbsp;&nbsp;ВНаличии<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ELSE</span> -ВНаличии <span class="code">END</span>) >= 50<br/>
+)
+<span class="comment">-- Конец объявления и создания табличной переменной</span><br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> Период, Товар.Наименование, Сумма<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> Остатки <span class="code">AS</span> Остатки<br/>
+<span class="code">INNER JOIN</span> <b>Справочник.Номенклатура</b> <span class="code">AS</span> Товар<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Остатки.Номенклатура = Товар.Ссылка<br/>
+</p>
+
+</div>
+
+</body>
+</html>
