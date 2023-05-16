@@ -1,0 +1,181 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>DML: язык управления данными</h3>
+
+<p>
+Язык запросов DaJet реализует DML подмножество своего языка исключительно
+для достижения вспомогательных целей. В частности для реализации
+<a href="https://zhichkin.github.io/async-data/index.html">команды CONSUME</a>.
+</p>
+
+<p>
+Любая интеграция с платформой 1С:Предприятие 8 путём прямой записи каких-либо данных
+непосредственно в таблицы базы данных 1С является потенциально ошибочной.
+</p>
+
+<p>
+Причиной этому служит то, что платформа 1С:Предприятие 8 выполняет запись в базу данных
+при помощи встроенных в неё объектов типа "СправочникОбъект", "ДокументОбъект",
+"РегистрСведенийНаборЗаписей" и так далее. Все эти объекты являются частью подсистемы ORM
+(object-relational mapping) платформы.
+</p>
+
+<p>
+Подсистема ORM 1С, в свою очередь, имеет ряд программных обработчиков событий записи
+объектов в базу данных. Например, подписки на события и обработчики модулей объектов,
+которые выполняются в транзакции записи объекта в базу данных и часто (почти всегда)
+содержат бизнес-логику прикладного решения на языке 1С.
+</p>
+
+<p>
+Таким образом, непосредственная запись данных напрямую в таблицы базы данных
+прикладных объектов платформы 1С:Предприятие 8 игнорирует существование обработчиков
+этих событий, то есть они не выполняются!
+</p>
+
+<h3>Команда INSERT</h3>
+
+<p>
+Особенностью команды INSERT в реализации языка запросов DaJet является сопоставление
+значений полей источника данных (выборка записей) с полями приёмника (таблицы) по их именам.
+</p>
+
+<p>
+Это принципиально отличается
+от классического синтаксиса SQL, который выполняет сопоставление данных источника
+и приёмника согласно указанной пользователем последовательности, то есть по их позиции
+в этой последовательности.
+</p>
+
+<p>
+Ещё одной особенностью команды INSERT в реализации DaJet является то, что все,
+не указанные источником данные, но имеющиеся в приёмнике, будут автоматически
+установлены в значения по умолчанию.
+</p>
+
+<p>
+Например, источником данных ниже является общее табличное выражение source, которое
+предоставляет для вставки в таблицу "Справочник.Номенклатура" следующие данные:
+Ссылка, Код и Наименование. Все остальные реквизиты справочника будут заполнены
+значениями по умолчанию!
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@new_code</i> <b>string</b> = 'ТЦ-000001';<br/>
+<span class="code">DECLARE</span> <i>@new_name</i> <b>string</b> = 'Новая номенклатура';<br/>
+<span class="code">DECLARE</span> <i>@new_uuid</i> <b>Справочник.Номенклатура</b> = '0C9150E8-6B51-4DAB-9B14-0F857013EA8B';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> source <span class="code">AS</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> <i>@new_uuid</i> <span class="code">AS</span> Ссылка,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>@new_code</i> <span class="code">AS</span> Код,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>@new_name</i> <span class="code">AS</span> Наименование<br/>
+)<br/>
+<span class="code">INSERT</span> <b>Справочник.Номенклатура</b> <span class="code">FROM</span> source<br/>
+<br/>
+<span class="comment">-- Проверка результата выполнения команды INSERT</span><br/>
+<span class="code">SELECT</span> Ссылка, Код, Наименование<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b><br/>
+&nbsp;<span class="code">WHERE</span> Ссылка = <i>@new_uuid</i><br/>
+</p>
+
+<h3>Команда UPDATE</h3>
+
+<p>Команда UPDATE работает аналогично команде INSERT, получая данные из выборки.</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@code</i> <b>string</b> = '222';<br/>
+<span class="code">DECLARE</span> <i>@name</i> <b>string</b> = 'Валюта ∫';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> source <span class="code">AS</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> <i>@code</i> <span class="code">AS</span> Код,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>@name</i> <span class="code">AS</span> Значение<br/>
+)<br/>
+<span class="code">UPDATE</span> <b>Справочник.Валюты</b> <span class="code">FROM</span> source<br/>
+&nbsp;<span class="code">WHERE</span> Код = source.Код<br/>
+&nbsp;&nbsp;&nbsp;<span class="code">SET</span> Наименование = source.Значение<br/>
+<br/>
+<span class="comment">-- Проверка результата выполнения команды UPDATE</span><br/>
+<span class="code">SELECT</span> Ссылка, Код, Наименование<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Валюты</b><br/>
+&nbsp;<span class="code">WHERE</span> Код = <i>@code</i><br/>
+</p>
+
+<h3>Команда UPSERT</h3>
+
+<p>
+Команда UPSERT является комбинацией последовательного выполнения команд UPDATE и INSERT.
+Правила сопоставления свойств объектов источника и приёмника здесь действуют в той же мере,
+в которой они были описаны для команды INSERT.
+</p>
+
+<p>
+Предложение WHERE используется в качестве синхронизации данных между источником и приёмником.
+Если условие выполняется, то будет выполняться UPDATE по данным, предоставленным в
+предложении SET. В противном случае будет выполнена команда INSERT по данным,
+предоставленным источником source.
+</p>
+
+<p>
+Команда UPSERT может выполняться с <b>необязательной опцией IGNORE UPDATE</b>.
+В таком случае, если условие WHERE выполняется, то команда INSERT не выполняется.
+Команада UPDATE не выполняется в любом случае. Другими словами данный вариант синтаксиса
+UPSERT выполняет только команду INSERT и только если предложение WHERE вернёт
+отрицательный (ложный) результат.
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@code</i> <b>string</b> = '333';<br/>
+<span class="code">DECLARE</span> <i>@name</i> <b>string</b> = 'Рубль 333';<br/>
+<span class="code">DECLARE</span> <i>@entity</i> <b>Справочник.Валюты</b> = 'CC70FDD5-14CD-494E-AA29-45B106544B34';<br/>
+<br/>
+<span class="code">CREATE COMPUTED TABLE</span> source <span class="code">AS</span><br/>
+(<br/>
+&nbsp;&nbsp;<span class="code">SELECT</span> <i>@entity</i> <span class="code">AS</span> Ссылка,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>@code</i>&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Код,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>@name</i>&nbsp;&nbsp;&nbsp;<span class="code">AS</span> Наименование<br/>
+)<br/>
+<span class="code">UPSERT</span> <b>Справочник.Валюты</b> [<span class="code">IGNORE UPDATE</span>] <span class="code">FROM</span> source<br/>
+&nbsp;<span class="code">WHERE</span> Код = source.Код<br/>
+&nbsp;&nbsp;&nbsp;<span class="code">SET</span> Наименование = source.Наименование<br/>
+<br/>
+<span class="comment">-- Проверка результата выполнения команды UPSERT</span><br/>
+<span class="code">SELECT</span> Ссылка, Код, Наименование<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Валюты</b><br/>
+&nbsp;<span class="code">WHERE</span> Код = <i>@code</i><br/>
+</p>
+
+<h3>Команда DELETE</h3>
+
+<p>Команда DELETE реализована максимально просто.</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="comment">-- Полная очистка таблицы</span><br/>
+<span class="code">DELETE</span> <b>Справочник.Валюты</b><br/>
+<br/>
+<span class="comment">-- Частичная очистка по условию</span><br/>
+<span class="code">DELETE</span> <b>Справочник.Валюты</b> <span class="code">WHERE</span> Код = '840'
+</p>
+
+</div>
+
+</body>
+</html>

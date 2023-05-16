@@ -10,6 +10,7 @@ ul { margin-left: 0; }
 li { margin: 10px 0px 0px 0px; }
 table { font-size: 1.0em; font-family: monospace; }
 td { border: 1px solid black; padding: 5px; }
+span.code { color: blue; font-weight: bold; }
 </style>
 <body>
 
@@ -177,12 +178,12 @@ td { border: 1px solid black; padding: 5px; }
 <p>
 Синтаксис команды аналогичен синтаксису команды SELECT.
 </p>
-<p>
-<b>CONSUME TOP</b> <размер пакета><br/>
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">CONSUME TOP</span> <размер пакета><br/>
 <список полей><br/>
-<b>FROM</b> <таблица><br/>
-<b>WHERE</b> <отбор><br/>
-<b>ORDER BY</b> <последовательность><br/>
+<span class="code">FROM</span> <таблица><br/>
+<span class="code">WHERE</span> <отбор><br/>
+<span class="code">ORDER BY</span> <последовательность><br/>
 </p>
 <p>
 <b><размер пакета></b> - количество записей таблицы-очереди, возвращаемых
@@ -210,18 +211,18 @@ td { border: 1px solid black; padding: 5px; }
 для обработки. Отбор записей выполняется по коду получателя сообщений, а последовательность
 обработки сообщений определяется по их приоритету и порядковому номеру.
 </p>
-<p>
-<b>CONSUME TOP</b> 1000<br/>
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">CONSUME TOP</span> 1000<br/>
 &nbsp;&nbsp;НомерСообщения,<br/>
 &nbsp;&nbsp;ТипСообщения,<br/>
 &nbsp;&nbsp;ТелоСообщения<br/>
-<b>FROM</b><br/>
-&nbsp;&nbsp;РегистрСведений.ИсходящаяОчередь<br/>
-<b>WHERE</b><br/>
+<span class="code">FROM</span><br/>
+&nbsp;&nbsp;<b>РегистрСведений.ИсходящаяОчередь</b><br/>
+<span class="code">WHERE</span><br/>
 &nbsp;&nbsp;Получатель = 'POS-0333'<br/>
-<b>ORDER BY</b><br/>
-&nbsp;&nbsp;Приоритет&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ASC,<br/>
-&nbsp;&nbsp;НомерСообщения ASC<br/>
+<span class="code">ORDER BY</span><br/>
+&nbsp;&nbsp;Приоритет&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ASC</span>,<br/>
+&nbsp;&nbsp;НомерСообщения <span class="code">ASC</span><br/>
 </p>
 <p>
 Следующий пример возвращаемых данных демонстрирует ситуацию, когда приоритет обработки

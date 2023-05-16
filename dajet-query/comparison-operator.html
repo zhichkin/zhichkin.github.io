@@ -1,0 +1,80 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3>Переопределение оператора сравнения</a></h3>
+
+<p>
+Язык запросов DaJet переопределяет поведение оператора сравнения на равенство
+для составных ссылочных типов данных. Это необходимо для того, чтобы учесть
+особенность хранения значений составных типов данных на уровне СУБД.
+</p>
+
+<p>
+Кроме этого, подобные трансформации кода необходимы для того, чтобы правильно "попадать"
+в индексы СУБД для построения оптимальных планов выполнения запросов.
+</p>
+
+<p><a href="dajet-type-system.html">Система типов данных языка запросов</a></p>
+
+<p><a href="https://its.1c.ru/db/metod8dev/content/1828/hdoc">Официальная документация 1С:Предприятие 8</a></p>
+
+<p><b>Пример трансформации сравнения "ссылка = параметр":</b></p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="comment">-- Код на языке запросов DaJet</span><br/>
+<br/>
+<span class="code">DECLARE</span> <i>@entity</i> <b>Документ.ЗаказКлиента</b> = '8d40e09c-935c-8ecc-11ed-71076402f3b2';<br/>
+<br/>
+<span class="code">SELECT</span> Регистратор<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ОстаткиПоЗаказам</b><br/>
+&nbsp;<span class="code">WHERE</span> Регистратор = <i>@entity</i><br/>
+<br/>
+<span class="comment">-- Код запроса для MS SQL Server</span><br/>
+<br/>
+<span class="code">SELECT</span> _RecorderTRef <span class="code">AS</span> Регистратор_TRef,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_RecorderRRef <span class="code">AS</span> Регистратор_RRef<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> _AccumRg1012<br/>
+&nbsp;<span class="code">WHERE</span> (_RecorderTRef = 0x00000354<br/>
+&nbsp;&nbsp;&nbsp;<span class="code">AND</span>&nbsp;&nbsp;_RecorderRRef = @entity)<br/>
+</p>
+
+<p><b>Пример трансформации сравнения "ссылка = ссылка":</b></p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="comment">-- Код на языке запросов DaJet</span><br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> Регистратор<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> <b>РегистрНакопления.ОстаткиПоЗаказам</b> <span class="code">AS</span> Остатки<br/>
+<span class="code">INNER JOIN</span> <b>Документ.ЗаказКлиента</b> <span class="code">AS</span> Заказ<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> Остатки.Регистратор = Заказ.Ссылка<br/>
+<br/>
+<span class="comment">-- Код запроса для MS SQL Server</span><br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">SELECT</span> _RecorderTRef <span class="code">AS</span> Регистратор_TRef,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_RecorderRRef <span class="code">AS</span> Регистратор_RRef<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">FROM</span> _AccumRg1012 <span class="code">AS</span> Остатки<br/>
+<span class="code">INNER JOIN</span> _Document852 <span class="code">AS</span> Заказ<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">ON</span> (Остатки._RecorderTRef = 0x00000354<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code">AND</span>&nbsp;&nbsp;Остатки._RecorderRRef = Заказ._IDRRef)<br/>
+</p>
+
+</div>
+
+</body>
+</html>
