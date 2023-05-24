@@ -1,0 +1,56 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet.Flow.SqlServer.OneDbProducer</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td, th { border: 1px solid black; padding: 5px; }
+</style>
+<body>
+
+<h3>DaJet.Flow.SqlServer.OneDbProducer</h3>
+
+<p>
+Блок-приёмник данных: выполняет инструкции DML<br/>
+в базе данных 1С:Предприятие 8 на языке DaJet QL,<br/>
+а именно INSERT, UPDATE, UPSERT или DELETE.
+</p>
+
+<p>
+<b>Тип СУБД:</b> Microsoft SQL Server
+</p>
+
+<p>
+<b>Входящий тип данных:</b> <a href="https://learn.microsoft.com/en-us/dotnet/api/system.data.idatarecord">System.Data.IDataRecord</a>
+</p>
+
+<p>
+<b>Исходящий тип данных:</b> НЕТ
+</p>
+
+<p><b>Настройки блока OneDbProducer:</b></p>
+
+<table style="border: 1px solid black;">
+
+<tr><th>Опция</th><th>Значение</th><th>Пример</th></tr>
+
+<tr><td>Target</td>
+<td>Индентификатор базы данных на сервере DaJet</td>
+<td>ms-trade-demo</td></tr>
+
+<tr><td>Script</td>
+<td>Идентификатор скрипта (запроса) базы данных,<br/>указанной в опции Source (путь или URL)</td>
+<td>sync/upsert-product</td></tr>
+
+<tr><td>Timeout</td>
+<td>Таймаут выполнения запроса СУБД в секундах</td>
+<td>5</td></tr>
+
+</table>
+
+</body>
+</html>
