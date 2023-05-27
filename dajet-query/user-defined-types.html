@@ -1,0 +1,215 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaJet QL ©</title>
+</head>
+<style>
+body { font-size: 1.2em; font-family: monospace; }
+ul { margin-left: 0; }
+li { margin: 10px 0px 0px 0px }
+td { border: 1px solid black; padding: 5px; }
+table { border: 1px solid black; }
+span.code { color: blue; font-weight: bold; }
+span.comment { color: green; }
+</style>
+<body>
+<div style="max-width: 700px; margin-left: auto; margin-right: auto;">
+
+<h3><a href="./index.html">Язык запросов DaJet</a></h3>
+<h3>User-defined types (контракты данных)</h3>
+
+<p>
+Язык запросов DaJet реализует пользовательские типы данных СУБД (user-defined types).
+Эти типы данных определяются пользователем и являются структурами (контрактами данных),
+которые можно использовать двумя способами:
+<ul>
+<li>табличные параметры запросов (table-valued parameters)</li>
+<li>импорт табличных данных из внешних источников (запросов)</li>
+</ul>
+Пользовательские типы данных (далее - контракт данных) определяют
+интерфейс взаимодействия внешних систем с базой данных,
+в которой этот контракт данных создан. Более того данный контракт
+может быть использован этой же самой базой данных для передачи табличных
+параметров между собственными скриптами.
+</p>
+
+<p>
+<b>Пример создания контракта данных:</b>
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">CREATE TYPE</span> <b>udt_input_data</b><br/>
+(<br/>
+&nbsp;&nbsp;ЭтоБулево&nbsp;&nbsp;<b>boolean</b>,<br/>
+&nbsp;&nbsp;ЭтоЧисло&nbsp;&nbsp;&nbsp;<b>number(9,2)</b>,<br/>
+&nbsp;&nbsp;ЭтоДата&nbsp;&nbsp;&nbsp;&nbsp;<b>datetime</b>,<br/>
+&nbsp;&nbsp;ЭтоСтрока&nbsp;&nbsp;<b>string(30)</b>,<br/>
+&nbsp;&nbsp;ЭтоUuid&nbsp;&nbsp;&nbsp;&nbsp;<b>uuid</b>,<br/>
+&nbsp;&nbsp;ЭтоБинарка&nbsp;<b>binary</b><br/>
+)
+</p>
+
+<p>
+Выполнение скрипта выше создаст в целевой базе данных соответствующий объект.<br/>
+Пример приведён для Microsoft SQL Server (для PostgreSQL всё аналогично):
+</p>
+
+<img src="img/sql-server-udt.png" alt="Пример UDT для MS SQL Server">
+
+<p>
+После того, как контракт данных создан, его можно использовать
+в качестве табличного параметра запроса DaJet. При этом важно понимать, что этот
+параметр является таблицей (набором записей) имеющих, определённую контрактом структуру.
+Таким образом, входящий табличный параметр можно использовать в запросе как обычную таблицу,
+обращаясь к полям записей этой таблицы через точку.
+</p>
+
+<h3>Пример использования контракта данных в запросе</h3>
+
+<p>
+Например, создадим в базе данных ms-demo-db скрипт (сервис api)
+по следующему пути /flow/05-test-input-table. Сохраним скрипт.<br/>
+<b>Внимание!</b> Можно сразу убедиться, что он рабочий, нажав кнопку [SQL].
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@input</i> <span class="code">AS</span> <b>udt_input_data</b>;<br/>
+<br/>
+<span class="code">SELECT</span><br/>
+&nbsp;&nbsp;t.ЭтоБулево,&nbsp;t.ЭтоЧисло,<br/>
+&nbsp;&nbsp;t.ЭтоДата,&nbsp;&nbsp;&nbsp;t.ЭтоСтрока,<br/>
+&nbsp;&nbsp;t.ЭтоUuid,&nbsp;&nbsp;&nbsp;t.ЭтоБинарка<br/>
+<span class="code">FROM</span><br/>
+&nbsp;&nbsp;<i>@input</i> <span class="code">AS</span> t
+</p>
+
+<p>
+Теперь когда у нас есть запрос выше, то для того, чтобы проверить его работу,
+можно, например, выполнить следующий POST запрос в программе Postman:
+</p>
+
+<img src="img/post-input-table-request.png" alt="post-input-table-request">
+
+<p>
+В результате мы получим следующий ответ от web api сервера DaJet:
+</p>
+
+<img src="img/post-input-table-response.png" alt="post-input-table-response">
+
+<h3>Пример импорта внешних данных в запрос</h3>
+
+<p>
+Для того, чтобы получить данные из внешнего источника, например, базы данных PostgreSQL,
+создадим в локальной базе данных, например, Microsoft SQL Server контракт данных,
+как на примере ниже:</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">CREATE TYPE</span> <b>udt_catalog_items</b><br/>
+(<br/>
+&nbsp;&nbsp;Ссылка&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>uuid</b>,<br/>
+&nbsp;&nbsp;Код&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>string(8)</b>,<br/>
+&nbsp;&nbsp;Наименование&nbsp;<b>string(50)</b><br/>
+)
+</p>
+
+<p>
+После этого в базе данных PostgreSQL создадим скрипт, который возвращает данные согласно
+определённому в Microsoft SQL Server контракту выше.
+Назовём этот скрипт, например, <b>pg-select-products</b>.
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@code</i> <b>string</b> = 'PG-11';<br/>
+<br/>
+<span class="code">SELECT</span> Ссылка, Код, Наименование<br/>
+&nbsp;&nbsp;<span class="code">FROM</span> <b>Справочник.Номенклатура</b><br/>
+&nbsp;<span class="code">WHERE</span> Код = <i>@code</i>
+</p>
+
+<p>
+Затем, проверив то, что скрипт PostgreSQL рабочий, возвращаемся в целевую базу данных,
+в нашем примере это Microsoft SQL Server, и создаём следующий скрипт:
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@input</i> <span class="code">AS</span> <b>udt_catalog_items</b>;<br/>
+<br/>
+<span class="code">IMPORT</span> 'dajet://pg-demo-db/pg-select-products' <span class="code">INTO</span> <i>@input</i><br/>
+<br/>
+<span class="code">SELECT</span> t.Ссылка, t.Код, t.Наименование <span class="code">FROM</span> <i>@input</i> <span class="code">AS</span> t<br/>
+<br/>
+<table>
+<tr><td><b>Ссылка</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>8d40e29c-935c-8ecc-11ed-9ab052a83634</td><td>PG-11</td><td>PG-11</td></tr>
+</table>
+</p>
+
+<p>
+Команда <b>IMPORT</b> языка запросов DaJet достаточно проста и интуитивно понятна.
+Адрес внешнего скрипта задаётся в формате URI, в котором мы указываем идентификатор базы
+данных DaJet и сразу после него путь к нужному скрипту в этой базе данных. В предложении
+<b>INTO</b> мы указываем табличную переменную, объявленную ранее в скрипте, в которую
+необходимо поместить результат. Возвращаемые внешним запросом данные должны строго
+соответствовать, определённому для табличной переменной контракту.
+</p>
+
+<h3>Передача параметров во внешний запрос</h3>
+
+<p>
+Пример выше демонстрирует вызов внешнего запроса, который имеет входящий параметр
+<b>@code</b> и ему задано значение по умолчанию равное "PG-11".<br/>
+Для передачи параметра во внешний запрос из текущего можно воспользоваться следующим скриптом:
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@input</i> <span class="code">AS</span> <b>udt_catalog_items</b>;<br/>
+<span class="code">DECLARE</span> <i>@code</i> <span class="code">AS</span> <b>string</b> = 'PG-12';<br/>
+<br/>
+<span class="code">IMPORT</span> 'dajet://pg-demo-db/pg-select-products?code' <span class="code">INTO</span> <i>@input</i><br/>
+<br/>
+<span class="code">SELECT</span> t.Ссылка, t.Код, t.Наименование <span class="code">FROM</span> <i>@input</i> <span class="code">AS</span> t<br/>
+<br/>
+<table>
+<tr><td><b>Ссылка</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>8d40e29c-935c-8ecc-11ed-9ab06c852cdd</td><td>PG-12</td><td>PG-12</td></tr>
+</table>
+</p>
+
+<p>
+Нетрудно заметить, что был добавлен параметр <b>@code</b> со значением "PG-12".
+Кроме этого в URI внешнего скрипта была добавлена ссылка на этот параметр: <b>?</b>code.
+Для добавления двух и более параметров можно использовать стандартный синтаксис,
+например, так: <b>?</b>code1<b>&</b>code2. Если названия параметров внешнего скрипта и
+текущего не совпадают, то можно решить эту проблему так, как показано на примере ниже
+(обратите внимание на сопоставление имён параметров <b>?</b>code<b>=</b>my_code):
+</p>
+
+<p style="padding: 10px; background: lightgrey;">
+<span class="code">DECLARE</span> <i>@input</i> <span class="code">AS</span> <b>udt_catalog_items</b>;<br/>
+<span class="code">DECLARE</span> <i>@my_code</i> <span class="code">AS</span> <b>string</b> = 'PG-12';<br/>
+<br/>
+<span class="code">IMPORT</span> 'dajet://pg-demo-db/pg-select-products?code=my_code' <span class="code">INTO</span> <i>@input</i><br/>
+<br/>
+<span class="code">SELECT</span> t.Ссылка, t.Код, t.Наименование <span class="code">FROM</span> <i>@input</i> <span class="code">AS</span> t<br/>
+<br/>
+<table>
+<tr><td><b>Ссылка</b></td><td><b>Код</b></td><td><b>Наименование</b></td></tr>
+<tr><td>8d40e29c-935c-8ecc-11ed-9ab06c852cdd</td><td>PG-12</td><td>PG-12</td></tr>
+</table>
+</p>
+
+<h3>Дополнительные замечания:</h3>
+
+<ul>
+<li>Команда IMPORT может вызваться не только для внешних источников данных,
+но и для вызова скриптов локальной базы данных - синтаксис и правила те же.</li>
+<li>Команда IMPORT может вызываться несколько раз в одном и том же скрипте
+одна за другой для разных источников данных, разных контрактов и переменных.</li>
+<li>Скрипт, использующий команду IMPORT, может быть вызван как DaJet web api
+точно так же, как и все остальные скрипты DaJet - правила те же.</li>
+</ul>
+
+</div>
+</body>
+</html>
