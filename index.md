@@ -1,4 +1,6 @@
-DaJet ©
+---
+title: DaJet ©
+---
 
 [GitHub](https://github.com/zhichkin/dajet)
 
