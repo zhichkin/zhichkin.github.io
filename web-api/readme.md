@@ -1,4 +1,4 @@
-[Начало](index.md)
+[Начало](../index.md)
 
 # DaJet web api
 
