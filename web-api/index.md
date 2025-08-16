@@ -2,7 +2,7 @@
 title: DaJet Web API
 description: Управление сервером DaJet и создание собственных Web API
 ---
-[Главная](../index.md)
+[Главная](../index.md#dajet-web-api)
 
 ### Сервис /md
 - Управвление списком баз данных на сервере DaJet
