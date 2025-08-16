@@ -1,4 +1,5 @@
 title: DaJet ©
+description: SQL-подобный язык для интеграции и потоковой обработки данных
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
 - jekyll-remote-theme
