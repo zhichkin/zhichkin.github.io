@@ -1,6 +1,6 @@
 ---
 title: DaJet Web API
-description: Управление сервером DaJet, создание собственных Web API, вызов скриптов по HTTP
+description: Управление сервером DaJet и создание собственных Web API
 ---
 [Начало](../index.md)
 
