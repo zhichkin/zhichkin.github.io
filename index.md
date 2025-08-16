@@ -2,4 +2,4 @@
 
 [Telegram](https://t.me/dajet_studio)
 
-- [DaJet web api](/web-api/readme.md)
+#### [DaJet web api](/web-api/index.md)
