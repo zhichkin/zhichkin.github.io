@@ -1,6 +1,6 @@
 <a href="https://github.com/zhichkin/dajet"><img width="24" height="24" alt="GitHub" src="/assets/img/github-logo.png" /></a>
 <a href="https://hub.docker.com/r/zhichkin/dajet-studio"><img width="24" height="24" alt="DockerHub" src="/assets/img/docker-logo.png" /></a>
-<a href="https://t.me/dajet_studio"><img width="24" height="24" alt="Telegram" src="/assets/img/github-logo.png" /></a>
+<a href="https://t.me/dajet_studio"><img width="24" height="24" alt="Telegram" src="/assets/img/telegram-logo.png" /></a>
 
 #### DaJet Web API
 
