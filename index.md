@@ -28,7 +28,7 @@ DaJet Studio - это среда разработки DaJet Script. IDE встр
 
 Сервер DaJet реализует ряд сервисов Web API для управления своими подсистемами, а также вызова пользовательских скриптов по HTTP, что позволяет создавать собственные Web API на базе сервера DaJet, используя DaJet Script.
 
-[Подробнее](/web-api/index.md)
+[Подробнее](/dajet-web-api/index.md)
 
 ### DaJet Script Host
 
@@ -40,10 +40,10 @@ DaJet Studio - это среда разработки DaJet Script. IDE встр
 
 Последние актуальные версии образов DaJet Studio для Linux и Windows публикуются на DockerHub.
 
-[Подробнее](/docker/index.md)
+[Подробнее](/dajet-docker/index.md)
 
 ### Блог DaJet
 
 Обучающие статьи, практика применения и прочие материалы, относящиеся к использованию DaJet.
 
-[Подробнее](/blog/index.md)
+[Подробнее](/dajet-blog/index.md)
