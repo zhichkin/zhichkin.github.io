@@ -1,6 +1,6 @@
 ---
-title: DaJet Blog
+title: Блог DaJet
 description: Статьи и прочие полезные материалы
 ---
-[Главная](../index.md#dajet-blog)
+[Главная](../index.md#блог-dajet)
 
