@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Начало](/dajet-script/index.md)
+[Начало](/dajet-script)
 
 ### Система типов данных
 
@@ -10,7 +8,8 @@
 > Только в минимально необходимом для работы с информационными базами 1С:Предприятие 8 объёме.<br>
 > Объявить переменную типа ```union``` в коде DaJet Script невозможно!
 
-**Таблица типов данных DaJet Script**
+## Таблица типов данных DaJet Script
+
 |**1С:Предприятие 8**|**DaJet Script**|**C#**|**MS SQL Server**|**PostgreSQL**|
 |--------------------|----------------|------|-----------------|--------------|
 |Неопределено|null|null|NULL|NULL|
@@ -18,12 +17,12 @@
 |Число|number|decimal<br>int<br>long|numeric<br>int<br>bigint|numeric<br>integer<br>bigint|
 |Дата|datetime|DateTime|datetime2|timestamp<br>without time zone|
 |Строка|string|string|nchar<br>nvarchar|mchar<br>mvarchar|
-|Ссылка|[entity](/dajet-script/entity/index.md)|[Entity](https://github.com/zhichkin/dajet/blob/main/src/dajet-model/core/Entity.cs)|binary(16)|bytea|
+|Ссылка|[entity](/dajet-script/entity)|[Entity](https://github.com/zhichkin/dajet/blob/main/src/dajet-model/core/Entity.cs)|binary(16)|bytea|
 |Составной тип|union|[Union](https://github.com/zhichkin/dajet/blob/main/src/dajet-model/core/Union.cs)|Все выше<br>перечисленные|Все выше<br>перечисленные|
 |Бинарные данные|binary|byte[]|varbinary|bytea|
 |Уникальный<br>идентификатор|uuid|Guid|binary(16)|bytea|
-|Структура|[object](/dajet-script/object/index.md)|[DataObject](https://github.com/zhichkin/dajet/blob/main/src/dajet-model/data/DataObject.cs)|UDT|UDT|
-|Массив|[array](/dajet-script/array/index.md)|List\<DataObject\>|UDT|UDT|
+|Структура|[object](/dajet-script/object)|[DataObject](https://github.com/zhichkin/dajet/blob/main/src/dajet-model/data/DataObject.cs)|UDT|UDT|
+|Массив|[array](/dajet-script/array)|List\<DataObject\>|UDT|UDT|
 
 ### Тип данных ```entity```
 
@@ -35,7 +34,8 @@
 
 > "Пустая ссылка" всегда строго типизированна, то есть указывает на отсутствие объекта какого-то определённого типа, например, "Справочник.Номенклатура".
 
-**Структура хранения ссылок на уровне СУБД**
+## Структура хранения ссылок на уровне СУБД
+
 |**Поле СУБД**|**MS SQL Server**|**PostgreSQL**|**C#**|**DaJet Script**|**Примечание**|
 |---|---|---|---|---|---|
 |_TRef|binary(4)|bytea|int|number|Код типа ссылки<br>В определённых случаях может отсутствовать для оптимизации (уменьшения) объёма хранимых данных|
@@ -45,7 +45,8 @@
 
 ```union``` - это структура данных, которая на уровне СУБД состоит из нескольких полей. Количество и наличие тех или иных полей зависит от ситуации и настроек конфигурации (прикладного решения) 1С:Предприятие 8. Данный тип данных является реализацией дискриминированного объединения (tagged union). Аналогичен типу данных ```std::variant``` в C++17.
 
-**Структура хранения составных типов на уровне СУБД**
+## Структура хранения составных типов на уровне СУБД
+
 |**Поле СУБД**|**1С:Предприятие 8**|**MS SQL Server**|**PostgreSQL**|**DaJet Script**|**C#**|
 |-------------|--------------------|-----------------|--------------|----------------|------|
 |_TYPE|Дискриминатор|binary(1)|bytea|number|byte|
