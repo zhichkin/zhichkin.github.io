@@ -5,31 +5,30 @@ description: Документация и примеры использовани
 [Главная](../index.md#dajet-script)
 
 - [Общее описание](#общее-описание)
-- [Система типов данных](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/data-type-system/README.md)
-  - [Тип ```entity``` (ссылка)](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/entity/README.md)
-  - [Тип ```object``` (структура данных)](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/object/README.md)
-  - [Тип ```array``` (массив структур)](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/array/README.md)
-- [Объявление и использование переменных](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/variables/README.md)
-- [Преобразование типов данных, функция ```CAST```](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/cast/README.md)
-- [Определение и импорт типов ```object```](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/define/README.md)
-- [Модификация объектов (трансформация)](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/modify/README.md)
-- [Алгоритмические возможности](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/algorithm/README.md)
-- [Функция JSON](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/json/README.md)
-- [Вызов скриптов по http](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/http/README.md)
-- [Вызов внешних скриптов](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/execute/README.md)
+- [Система типов данных](/data-type-system/index.md)
+  - [Тип ```entity``` (ссылка)](/entity/index.md)
+  - [Тип ```object``` (структура данных)](/object/index.md)
+  - [Тип ```array``` (массив структур)](/array/index.md)
+- [Объявление и использование переменных](/variables/index.md)
+- [Преобразование типов данных, функция ```CAST```](/cast/.md)
+- [Определение и импорт типов ```object```](/define/index.md)
+- [Модификация объектов (трансформация)](/modify/index.md)
+- [Алгоритмические возможности](/algorithm/index.md)
+- [Функция JSON](/json/index.md)
+- [Вызов скриптов по http](/http/index.md)
+- [Вызов внешних скриптов](/execute/index.md)
   - EXECUTE ```script.djs```
 - **Базы данных (mssql + pgsql)**
-  - [USE (контекст базы данных)](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/use/README.md)
-  - [Язык запросов DaJet Script](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/README.md)
-  - [Произвольные запросы SQL](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/request-sql/README.md)
-  - [Управление последовательностью](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/sequence/README.md)
-  - [Анализ метаданных 1С:Предприятие 8](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/md-streamer/README.md)
-  - [Конвертация ```uuid``` СУБД в формат 1С:Предприятие 8](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/convert-uuid/README.md)
-- [REQUEST](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/request/README.md) (http, web api)
-- [RabbitMQ](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/rabbitmq/README.md)
-- [Apache Kafka](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/kafka/README.md)
-- [Программное расширение DaJet Script](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/process/README.md)
-- [Готовые шаблоны скриптов DaJet Script](https://github.com/zhichkin/dajet/tree/main/doc/dajet-utility/scripts)
+  - [USE (контекст базы данных)](/use/index.md)
+  - [Язык запросов DaJet Script](/databases/index.md)
+  - [Произвольные запросы SQL](/request-sql/index.md)
+  - [Управление последовательностью](/sequence/index.md)
+  - [Анализ метаданных 1С:Предприятие 8](/md-streamer/index.md)
+  - [Конвертация ```uuid``` СУБД в формат 1С:Предприятие 8](/convert-uuid/index.md)
+- [REQUEST](/request/index.md) (http, web api)
+- [RabbitMQ](/rabbitmq/index.md)
+- [Apache Kafka](/kafka/index.md)
+- [Программное расширение DaJet Script](/process/index.md)
 
 ### Общее описание
 
@@ -41,5 +40,5 @@ description: Документация и примеры использовани
 
 DaJet Script является расширяемым языком программирования. Точками расширения являются пользовательские функции и процессоры данных (команда PROCESS), которые могут быть разработаны на языке C# путём реализации соответствующих классов или функций.
 
-Средой выполнения DaJet Script является платформа Microsoft .NET 8. Выполнение скриптов DaJet может осуществляться при помощи консольной утилиты [dajet](https://github.com/zhichkin/dajet/tree/main/doc/dajet-utility/README.md), специализированного [http-сервера](https://github.com/zhichkin/dajet/tree/main/doc/dajet-studio/README.md) или [программно](https://github.com/zhichkin/dajet/blob/main/src/dajet/Program.cs). Любой скрипт можно вызвать как web api метод http-сервера DaJet. Утилита dajet может использоваться как сервис Windows или демон Linux (поддерживается systemd) для регулярного выполнения скриптов (хостинга). Ну и, наконец, процессор скриптов DaJet предоставляет удобный API на C#, что позволяет интегрировать его практически в любую программную оболочку.
+Средой выполнения DaJet Script является платформа Microsoft .NET 8. Выполнение скриптов DaJet может осуществляться при помощи консольной утилиты [dajet](../dajet-host/index.md), специализированного [http-сервера](../dajet-studio/index.md) или [программно](https://github.com/zhichkin/dajet/blob/main/src/dajet/Program.cs). Любой скрипт можно вызвать как web api метод http-сервера DaJet. Утилита dajet может использоваться как сервис Windows или демон Linux (поддерживается systemd) для регулярного выполнения скриптов (хостинга). Ну и, наконец, процессор скриптов DaJet предоставляет удобный API на C#, что позволяет интегрировать его практически в любую программную оболочку.
 
