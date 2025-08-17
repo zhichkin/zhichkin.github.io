@@ -6,9 +6,9 @@ description: Документация и примеры использовани
 
 - [Общее описание](#общее-описание)
 - [Система типов данных](/data-type-system/index.md)
-  - [Тип ```entity``` (ссылка)](/entity/index.md)
-  - [Тип ```object``` (структура данных)](/object/index.md)
-  - [Тип ```array``` (массив структур)](/array/index.md)
+  - [Тип ```entity``` (ссылка)](/data-type-system/entity/index.md)
+  - [Тип ```object``` (структура данных)](/data-type-system/object/index.md)
+  - [Тип ```array``` (массив структур)](/data-type-system/array/index.md)
 - [Объявление и использование переменных](/variables/index.md)
 - [Преобразование типов данных, функция ```CAST```](/cast/.md)
 - [Определение и импорт типов ```object```](/define/index.md)
