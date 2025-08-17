@@ -33,11 +33,11 @@ docker run --name dajet-studio --user=root -it -p 5000:5000 zhichkin/dajet-studi
 
 После выполнения этой команды мы должны увидеть следующий консольный вывод:
 
-<img width="890" height="380" alt="image" src="/img/dajet-studio-run-in-docker.png" />
+<img width="890" height="380" alt="image" src="/dajet-docker/img/dajet-studio-run-in-docker.png" />
 
 При использовании Docker Desktop в списке контейнеров мы можем увидеть, например, следующее: появился новый контейнер с именем ```dajet-studio``` и он работает.
 
-<img width="997" height="354" alt="image" src="/img/docker-container-list.png" />
+<img width="997" height="354" alt="image" src="/dajet-docker/img/docker-container-list.png" />
 
 Далее нужно запустить браузер на локальной машине и подключиться к DaJet Studio по адресу ```http://localhost:5000```.
 
@@ -45,7 +45,7 @@ docker run --name dajet-studio --user=root -it -p 5000:5000 zhichkin/dajet-studi
 
 При установке Docker Desktop создаёт сопоставление локального IP-адреса имени ```host.docker.internal```. Это можно увидеть в системном файле Windows ```hosts```.
 
-<img width="762" height="322" alt="image" src="/img/windows-hosts-file.png" />
+<img width="762" height="322" alt="image" src="/dajet-docker/img/windows-hosts-file.png" />
 
 Таким образом мы можем отредактировать строку подключения к базе данных следующим образом:
 ```
@@ -54,7 +54,7 @@ Data Source=host.docker.internal;Initial Catalog=my-database;Integrated Security
 
 Далее нужно настроить правило для входящих соединений на локальной машине, другими словами открыть порт 1433. Это можно легко сделать в панели управления Windows Defender Firewall.
 
-<img width="781" height="472" alt="image" src="/img/windows-firewall-open-port.png" />
+<img width="781" height="472" alt="image" src="/dajet-docker/img/windows-firewall-open-port.png" />
 
 Можно указать порт SQL Server в строке подключения:
 ```
