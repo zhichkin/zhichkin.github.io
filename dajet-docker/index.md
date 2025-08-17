@@ -73,7 +73,7 @@ Data Source=host.docker.internal;Initial Catalog=my-database;User ID=sa;Password
 ```
 
 Для скриптов DaJet Script аналогичная настройка подключения может выглядеть следующим образом:
-```
+```SQL
 DECLARE @table array
 
 USE 'mssql://sa:sa@host.docker.internal/my-database'
