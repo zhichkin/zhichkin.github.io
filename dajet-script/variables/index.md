@@ -9,9 +9,9 @@
 - [Присваивание значения](#присваивание-значения)
 - [Область видимости](#область-видимости)
 - [Присваивание значения запросом](#присваивание-значения-запросом)
-- [Тип ```entity```](/dajet-script/entity)
-- [Тип ```object```](/dajet-script/object)
-- [Тип ```array```](/dajet-script/array)
+- [Тип ```entity```](/dajet-script/data-type-system/entity)
+- [Тип ```object```](/dajet-script/data-type-system/object)
+- [Тип ```array```](/dajet-script/data-type-system/array)
 
 ### Объявление
 
