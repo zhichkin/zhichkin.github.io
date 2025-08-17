@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Объявление и использование переменных
 
@@ -11,9 +9,9 @@
 - [Присваивание значения](#присваивание-значения)
 - [Область видимости](#область-видимости)
 - [Присваивание значения запросом](#присваивание-значения-запросом)
-- [Тип ```entity```](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/entity/README.md)
-- [Тип ```object```](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/object/README.md)
-- [Тип ```array```](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/array/README.md)
+- [Тип ```entity```](/dajet-script/entity)
+- [Тип ```object```](/dajet-script/object)
+- [Тип ```array```](/dajet-script/array)
 
 ### Объявление
 
