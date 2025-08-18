@@ -1,17 +1,16 @@
-## DaJet Script
+[Начало](/dajet-script)
 
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+### Вызов скриптов по HTTP
 
-### Вызов скриптов по http
+Скрипты DaJet Script можно вызвать удалённо по протоколу ```HTTP/S```. Для этого необходимо разместить файлы скриптов в каталоге ```code``` корневого каталога [web-сервера DaJet](/dajet-studio). Например, создадим в каталоге ```code``` вложенный каталог ```api``` и поместим в него файл скрипта ```test.djs```.
 
-Скрипты DaJet Script можно вызвать удалённо по протоколу ```http```. Для этого необходимо разместить файлы скриптов в каталоге ```code``` корневого каталога [http-сервера DaJet](https://github.com/zhichkin/dajet/blob/main/doc/dajet-studio/README.md). Например, создадим в каталоге ```code``` вложенный каталог ```api``` и поместим в него файл скрипта ```test.djs```.
-
-> Если в корневом каталоге http-сервера DaJet каталог ```code``` отсутствует, то создайте его вручную.
+> Если в корневом каталоге сервера DaJet каталог ```code``` отсутствует, то создайте его вручную.
 
 **Скрипт test.djs**
+
 ```SQL
 DECLARE @input  string -- Входящий параметр
-DECLARE @output object -- Тело http-ответа
+DECLARE @output object -- Тело HTTP-ответа
 
 SET @output = SELECT say = 'Hello, ' + @input + '!'
 
@@ -20,10 +19,12 @@ RETURN @output
 
 Вызвать этот скрипт можно, обратившись к сервису ```dajet/exe``` http-сервера DaJet. Путь к скрипту для этого сервиса будет выглядеть следующим образом: ```/api/test.djs```. Сервис обслуживает каталог ```code``` - указывать его в URL не нужно.
 
-**Пример вызова скрипта ```test.djs``` по http при помощи программы Postman**
-![dajet-script-http-postman](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-http-postman.png)
+#### Пример вызова скрипта ```test.djs``` по http при помощи программы Postman
 
-**Пример вызова скрипта ```test.djs``` по http при помощи DaJet Studio**
+![dajet-script-http-postman](/dajet-script/http/img/postman-example.png)
+
+#### Пример вызова скрипта ```test.djs``` по http при помощи DaJet Studio
+
 ```SQL
 -- ***************
 -- * request.djs *
@@ -45,7 +46,8 @@ PRINT @response.Value.say
 [2024-10-12 21:24:21] Hello, DaJet!
 ```
 
-**Пример вызова скрипта ```test.djs``` по http при помощи утилиты ```curl```**
-![dajet-script-http-postman](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-http-curl.png)
+#### Пример вызова скрипта ```test.djs``` по http при помощи утилиты ```curl```
+
+![dajet-script-http-curl](/dajet-script/http/img/curl-example.png)
 
 [Наверх](#вызов-скриптов-по-http)
