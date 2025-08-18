@@ -2,7 +2,7 @@
 title: DaJet Script
 description: Документация и примеры использования
 ---
-[Главная](../index.md#dajet-script)
+[Главная](/#dajet-script)
 
 - [Общее описание](#общее-описание)
 - [Система типов данных](/data-type-system/index.md)
