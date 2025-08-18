@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Команда EXECUTE](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/execute/README.md)
+[Начало](/dajet-script/execute)
 
 ### Асинхронный вызов скриптов
 - ["Выстрелил и забыл" (fire and forget)](#выстрелил-и-забыл-fire-and-forget)
@@ -32,7 +30,8 @@ EXECUTE [{ TASK | WORK }] 'file://<async-script>.djs'
 |IsCompleted|boolean|Признак завершения выполнения потока|
 |IsSucceeded|boolean|Признак завершения потока без ошибок|
 
-**Таблица состояний потока (свойство "Status")**
+#### Таблица состояний потока (свойство "Status")
+
 |Значение|Описание|
 |--------|--------|
 |Created|Задание создано, но ещё не запланировано к выполнению системой|

@@ -1,10 +1,8 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Команда EXECUTE
-- [Асинхронный вызов скриптов](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/execute/async/README.md)
-- [Синхронизация потока сообщений](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/execute/sync/README.md)
+- [Асинхронный вызов скриптов](/dajet-script/execute/async)
+- [Синхронизация потока сообщений](/dajet-script/execute/sync)
 
 Вызов одного скрипта DaJet Script из другого выполняется при помощи команды **EXECUTE**. Синтаксис этой команды выглядит следующим образом:
 
