@@ -76,7 +76,7 @@ END
 
 Команда **CONSUME** получает пользовательские заголовки сообщения RabbitMQ в виде значения типа ```object```. В ниже следующем примере заголовки сообщения сериализуются в формат JSON и сохраняются в ресурс "Заголовки" регистра сведений "ВходящиеСообщения".
 
-![outgoing-queue-data](/dajet-script/rabbitmq/consume/img/outgoing-queue.png)
+![outgoing-queue-data](/dajet-script/rabbitmq/consume/img/consume-outgoing-queue.png)
 
 ```SQL
 DECLARE @message object -- Сообщение RabbitMQ
@@ -103,6 +103,6 @@ USE 'mssql://server/database'
 END
 ```
 
-![consume-message-headers](/dajet-script/rabbitmq/consume/img/message-headers.png)
+![consume-message-headers](/dajet-script/rabbitmq/consume/img/consume-message-headers.png)
 
 [Наверх](#команда-consume)
