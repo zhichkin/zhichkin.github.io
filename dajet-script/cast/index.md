@@ -18,7 +18,7 @@
 ```SQL
 CAST(<expression> AS <target_type>)
 ```
-[Подробная информация о системе типов данных DaJet Script](/dajet-script/data-type-system/index.md)
+[Подробная информация о системе типов данных DaJet Script](/dajet-script/data-type-system)
 
 **\<expression\>** - выражение DaJet Script, обычно переменная или обращение к свойству объекта.<br>
 **\<target_type\>** - тип данных, к которому необходимо привести значение выражения. Допустимые значения:
@@ -47,7 +47,7 @@ CAST(<expression> AS <target_type>)
 |**uuid**||||||+|||+|
 |**binary**||true<br>false|big<br>endian|||UTF-8||+||
 
-[Подробная информация о других функциях анализа типов данных DaJet Script](/dajet-script/data-type-system/entity/index.md)
+[Подробная информация о других функциях анализа типов данных DaJet Script](/dajet-script/data-type-system/entity)
 
 > Тип данных ```string``` является универсальным типом данных в том смысле, что любой другой тип данных может быть выражен через него и преобразован обратно. Кроме этого следует иметь ввиду, что многие типы данных имеют в DaJet Script специальные литералы, которые преобразуются парсером языка в целевой тип автоматически.
 
