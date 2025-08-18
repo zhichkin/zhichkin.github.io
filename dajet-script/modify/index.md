@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Модификация (трансформация) ```object```
 
@@ -32,7 +30,7 @@
 
 Предложение **DELETE** удаляет из целевого объекта все свойства по указанным именам.
 
-#### SELECT \<list-of-column-expressions>\>
+#### SELECT \<list-of-column-expressions\>
 Предложение **SELECT** добавляет новые или изменяет значения существующих свойств целевого объекта.
 
 [Наверх](#модификация-трансформация-object)

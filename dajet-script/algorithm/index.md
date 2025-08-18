@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Алгоритмические возможности
 
@@ -15,8 +13,7 @@
   - [THROW](#команда-throw)
   - [Функция ERROR_MESSAGE](#функция-error_message)
 - [Приостановка выполнения кода (пауза)](#команда-sleep)
-- [Шаблон простого "вечного" сервиса](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/simple-service-example/README.md)
-- [Параллельное выполнение кода](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/parallelism/README.md)
+- [Параллельное выполнение кода](/dajet-script/algorithm/parallelism)
 
 Все команды, представленные в этом разделе, являются блочными. Это означает, что все они имеют обособленные блоки (области видимости объявления переменных), состоящие из одной или более команд DaJet Script.
 
