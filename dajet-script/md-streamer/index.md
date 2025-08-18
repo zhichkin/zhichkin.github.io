@@ -1,6 +1,4 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Анализ метаданных 1С:Предприятие 8
 
@@ -15,7 +13,7 @@
 
 Для анализа метаданных 1С:Предприятие 8 реализован специальный процессор [Metadata Streamer](https://github.com/zhichkin/dajet/blob/main/src/dajet-runtime/extensions/MetadataStreamer.cs).
 
-Данный процессор DaJet Script позволяет организовать обработку метаданных в виде потока сообщений аналогично работе команды [STREAM](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/stream/README.md). Каждое сообщение - это отдельный объект метаданных 1С:Предприятие 8 и имеет тип ```object```. Обработать такое сообщение можно всеми доступными средствами DaJet Script. Выгрузить можно метаданные любой конфигурации 1С:Предприятие 8. Актуальный список поддерживаемых DaJet Script объектов метаданных 1С можно найти в разделе документации ["Реляционные базы данных"](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/README.md).
+Данный процессор DaJet Script позволяет организовать обработку метаданных в виде потока сообщений аналогично работе команды [STREAM](/dajet-script/databases/stream). Каждое сообщение - это отдельный объект метаданных 1С:Предприятие 8 и имеет тип ```object```. Обработать такое сообщение можно всеми доступными средствами DaJet Script. Выгрузить можно метаданные любой конфигурации 1С:Предприятие 8. Актуальный список поддерживаемых DaJet Script объектов метаданных 1С можно найти в разделе документации ["Реляционные базы данных"](/dajet-script/databases).
 
 > Ниже приводится один из возможных вариантов практического использования Metadata Streamer.
 
@@ -23,8 +21,9 @@
 
 Целевой базой данных решения для экспорта метаданных является конфигурация 1С:Предприятие 8 "Реестр метаданных". Схема таблиц этой информационной базы представлена на диаграмме ниже. По ссылке можно найти описание конфигурации и скачать файл cf.
 
-[Конфигурация "Реестр метаданных"](https://github.com/zhichkin/dajet/tree/main/1c)
-![metadata-registry-database-schema](https://github.com/zhichkin/dajet/blob/main/1c/metadata-registry-database-schema.png)
+[Конфигурация "Реестр метаданных" (cf)](/dajet-script/md-streamer/1c/metadata-registry.cf)
+
+![metadata-registry-database-schema](/dajet-script/md-streamer/img/metadata-registry-database-schema.png)
 
 #### Набор скриптов md-streamer
 
@@ -35,18 +34,18 @@
 
 > Пути к файлам вспомогательных скриптов находятся здесь: main.djs, enum.djs, object.djs, tables.djs, properties.djs, register.djs. При необходимости их следует отредактировать соответствующим образом!
 
-[Набор скриптов md-streamer](https://github.com/zhichkin/dajet/tree/main/1c/md-streamer)
+[Набор скриптов md-streamer (zip)](/dajet-script/md-streamer/1c/md-streamer.zip)
 
 [Наверх](#анализ-метаданных-1спредприятие-8)
 
 #### Выполнение экспорта метаданных
 
-1. В корневой каталог ```code``` [DaJet Studio](https://github.com/zhichkin/dajet/blob/main/doc/dajet-studio/README.md) скопировать набор скриптов **md-streamer**.
+1. В корневой каталог ```code``` [DaJet Studio](/dajet-studio) скопировать набор скриптов **md-streamer**.
 2. Развернуть базу данных конфигурации "Реестр метаданных".
 3. Указать в скрипте **main.djs** правильные строки подключения к базе-источнику метаданных (первый USE) и базе-приёмнику (второй USE). База приёмник это развёрнутая ранее конфигурация "Реестр метаданных".
 4. Выполнить скрипт **main.djs**.
 
-Выполнить набор скриптов можно также при помощи [утилиты dajet](https://github.com/zhichkin/dajet/blob/main/doc/dajet-utility/README.md).
+Выполнить набор скриптов можно также при помощи [DaJet Script Host](/dajet-host).
 
 > **Внимание!** Конфигурация 1С:УНФ выгружается приблизительно 10 минут. Обрабатывается 3 364 объектов. В конфигурации "Реестр метаданных" создаётся 138 352 объектов, в том числе для описания колонок таблиц СУБД, а также таблица логических ссылок между объектами конфигурации и таблица значений перечислений. Размер базы данных приёмника на SQL Server получается около 110 Мб.
 

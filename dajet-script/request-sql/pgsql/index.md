@@ -1,10 +1,9 @@
-## DaJet Script
-
-[Назад](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/request-sql/README.md)
+[Назад](/dajet-script/request-sql)
 
 ### Произвольные запросы PostgreSQL
 
 **Пример скрипта PL/SQL для выполнения командой REQUEST**
+
 ```SQL
 -- ********************
 -- * Файл pg-test.sql *
@@ -32,6 +31,7 @@ DROP TABLE IF EXISTS test_table;
 ```
 
 **Пример выполнения скрипта ```pg-test.sql``` командой REQUEST**
+
 ```SQL
 -- ******************
 -- * pg-request.djs *
@@ -63,6 +63,7 @@ RETURN @Таблица
 ```
 
 **Результат выполнения скрипта DaJet Script ```pg-request.djs```**
+
 |Булево|Целое|Десятичное|ДатаВремя|Строка|Бинарник|Идентификатор|
 |------|-----|----------|---------|------|--------|-------------|
 |True|123|1.2345|12/05/2025 19:23:06|test тест|3q2+7w==|1653ce12-9b68-403d-8208-950eb1608a74|
