@@ -10,7 +10,7 @@ description: Документация и примеры использовани
   - [Тип ```object``` (структура данных)](/data-type-system/object/index.md)
   - [Тип ```array``` (массив структур)](/data-type-system/array/index.md)
 - [Объявление и использование переменных](/variables/index.md)
-- [Преобразование типов данных, функция ```CAST```](/cast/.md)
+- [Преобразование типов данных, функция ```CAST```](/cast/index.md)
 - [Определение и импорт типов ```object```](/define/index.md)
 - [Модификация объектов (трансформация)](/modify/index.md)
 - [Алгоритмические возможности](/algorithm/index.md)
