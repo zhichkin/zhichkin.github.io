@@ -1,6 +1,4 @@
-## DaJet Script
-
-[RabbitMQ](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/rabbitmq/README.md)
+[Назад](/dajet-script/rabbitmq)
 
 ### Команда PRODUCE
 
@@ -22,7 +20,7 @@ PRODUCE 'amqp://<username>:<password>@<server>:<port>/<virtual-host>'
 
 > Строка подключения к брокеру RabbitMQ указывается в формате URL, следовательно, все специфические символы, например в пароле пользователя, должны быть указаны в URL-кодировке.
 
-**Таблица свойств публикуемого сообщения RabbitMQ**
+#### Таблица свойств публикуемого сообщения RabbitMQ
 
 |**Свойство**|**Тип данных**|**Описание**|
 |---|---|---|
@@ -58,7 +56,7 @@ PRODUCE 'amqp://<username>:<password>@<server>:<port>/<virtual-host>'
 |ТелоСообщения|Ресурс|СТРОКА(0)|Тело сообщения|
 |Получатель|Реквизит|СТРОКА(36)|Код получателя|
 
-![outgoing-queue-data](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-produce-outgoing-queue.png)
+![outgoing-queue-data](/dajet-script/rabbitmq/produce/img/produce-outgoing-queue.png)
 
 [Наверх](#команда-produce)
 
@@ -89,7 +87,7 @@ USE 'mssql://server/database'
 END
 ```
 
-![message-example](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-produce-message-example.png)
+![message-example](/dajet-script/rabbitmq/produce/img/produce-message-example.png)
 
 [Наверх](#команда-produce)
 
@@ -99,7 +97,7 @@ END
 
 Команда **PRODUCE** позволяет работать с пользовательскими заголовками сообщений RabbitMQ. В следующем примере заголовки хранятся в формате JSON в исходящей очереди регистра сведений. Чтобы их отправить в очередь RabbitMQ, необходимо эти заголовки десериализовать при помощи функции **JSON** в объект типа ```object```, а затем присвоить полученное значение свойству ```Headers``` сообщения RabbitMQ.
 
-![outgoing-headers](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-produce-outgoing-headers.png)
+![outgoing-headers](/dajet-script/rabbitmq/produce/img/produce-outgoing-headers.png)
 
 ```SQL
 DECLARE @message object
@@ -128,7 +126,7 @@ USE 'mssql://server/database'
 END
 ```
 
-![message-headers](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-produce-message-headers.png)
+![message-headers](/dajet-script/rabbitmq/produce/img/produce-message-headers.png)
 
 [Наверх](#команда-produce)
 
@@ -164,6 +162,6 @@ USE 'mssql://server/database'
 END
 ```
 
-![message-headers-by-code](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-produce-message-headers-by-code.png)
+![message-headers-by-code](/dajet-script/rabbitmq/produce/img/produce-message-headers-by-code.png)
 
 [Наверх](#команда-produce)

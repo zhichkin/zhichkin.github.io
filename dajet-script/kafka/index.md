@@ -1,13 +1,11 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Начало](/dajet-script)
 
 ### Apache Kafka
 
 - [Отправка сообщений в топик Apache Kafka](#отправка-сообщений-в-топик-apache-kafka)
 - [Получение сообщений из топика Apache Kafka](#получение-сообщений-из-топика-apache-kafka)
 
-**DaJet Script** реализует работу с топиками **Apache Kafka** при помощи двух команд: **CONSUME** и **PRODUCE**. Концепция их работы аналогична [одноимённым командам RabbitMQ](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/rabbitmq/README.md).
+**DaJet Script** реализует работу с топиками **Apache Kafka** при помощи двух команд: **CONSUME** и **PRODUCE**. Концепция их работы аналогична [одноимённым командам RabbitMQ](/dajet-script/rabbitmq).
 
 > **Внимание!** Специальной строки подключения не используется! Указывается только идентификатор адаптера: **kafka**.
 
@@ -21,7 +19,7 @@
 - [Настройка команды PRODUCE - продюсер Apache Kafka](https://docs.confluent.io/platform/current/clients/producer.html)
 - [Настройка команды CONSUME - консюмер Apache Kafka](https://docs.confluent.io/platform/current/clients/consumer.html)
 
-**Таблица свойств записей (сообщений) Apache Kafka**
+#### Таблица свойств записей (сообщений) Apache Kafka
 
 |**Свойство**|**Тип данных**|**Описание**|
 |---|---|---|

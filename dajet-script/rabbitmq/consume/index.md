@@ -1,13 +1,11 @@
-## DaJet Script
-
-[RabbitMQ](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/rabbitmq/README.md)
+[Назад](/dajet-script/rabbitmq)
 
 ### Команда CONSUME
 - [Таблица свойств потребляемого сообщения RabbitMQ](#таблица-свойств-потребляемого-сообщения-rabbitmq)
 - [Пример кода DaJet Script](#пример-кода-dajet-script)
 - [Обработка пользовательских заголовков](#обработка-пользовательских-заголовков)
 
-Поведение команды **CONSUME**, реализующей потребление сообщений RabbitMQ, с точки зрения концепции потоковой обработки данных DaJet Script аналогично поведению команды [CONSUME](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/consume/README.md) для баз данных.
+Поведение команды **CONSUME**, реализующей потребление сообщений RabbitMQ, с точки зрения концепции потоковой обработки данных DaJet Script аналогично поведению команды [CONSUME](/dajet-script/databases/consume) для баз данных.
 
 ```SQL
 CONSUME 'amqp://<username>:<password>@<server>:<port>/<virtual-host>'
@@ -23,7 +21,7 @@ CONSUME 'amqp://<username>:<password>@<server>:<port>/<virtual-host>'
 
 > Строка подключения к брокеру RabbitMQ указывается в формате URL, следовательно, все специфические символы, например в пароле пользователя, должны быть указаны в URL-кодировке.
 
-**Таблица параметров команды CONSUME**
+#### Таблица параметров команды CONSUME
 
 |**Свойство**|**Тип данных**|**Описание**|
 |---|---|---|
@@ -78,7 +76,7 @@ END
 
 Команда **CONSUME** получает пользовательские заголовки сообщения RabbitMQ в виде значения типа ```object```. В ниже следующем примере заголовки сообщения сериализуются в формат JSON и сохраняются в ресурс "Заголовки" регистра сведений "ВходящиеСообщения".
 
-![outgoing-queue-data](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-consume-outgoing-queue.png)
+![outgoing-queue-data](/dajet-script/rabbitmq/consume/img/outgoing-queue.png)
 
 ```SQL
 DECLARE @message object -- Сообщение RabbitMQ
@@ -105,6 +103,6 @@ USE 'mssql://server/database'
 END
 ```
 
-![consume-message-headers](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-rabbitmq-consume-message-headers.png)
+![consume-message-headers](/dajet-script/rabbitmq/consume/img/message-headers.png)
 
 [Наверх](#команда-consume)
