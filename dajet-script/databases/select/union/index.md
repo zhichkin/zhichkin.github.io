@@ -1,6 +1,4 @@
-## DaJet Script
-
-[SELECT](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/README.md)
+[SELECT](/dajet-script/databases/select)
 
 ### Оператор UNION
 
@@ -9,7 +7,7 @@
 ```SQL
 DECLARE @table array
 
-USE 'mssql://zhichkin/ut-demo'
+USE 'mssql://server/database'
 
    SELECT 'НДС 10%' AS Name, Перечисление.СтавкиНДС.НДС10 AS Value
      INTO @table
@@ -26,6 +24,7 @@ END
 ```
 
 **Результат выполнения скрипта в DaJet Studio**
+
 |**Name**|**Value**|
 |--------|---------|
 |НДС 18%|93e8f7aa-e0ce-1fcd-48a8-76b826b5ef6b|

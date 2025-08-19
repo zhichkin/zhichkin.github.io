@@ -1,15 +1,13 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Назад](/dajet-script/databases)
 
 ### Команда SELECT
 
 - [Общее описание](#общее-описание)
-- [Табличный оператор JOIN](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/join/README.md)
-- [Табличный оператор UNION](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/union/README.md)
-- [Коррелированные подзапросы](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/subquery/README.md)
-- [Оператор APPLY (боковые соединения)](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/apply/README.md)
-- [Общие табличные выражения](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/cte/README.md)
+- [Табличный оператор JOIN](/dajet-script/databases/select/join)
+- [Табличный оператор UNION](/dajet-script/databases/select/union)
+- [Коррелированные подзапросы](/dajet-script/databases/select/subquery)
+- [Оператор APPLY (боковые соединения)](/dajet-script/databases/select/apply)
+- [Общие табличные выражения](/dajet-script/databases/select/cte)
 - Строковые функции
   - LTRIM, RTRIM, LOWER, UPPER, REPLACE, CONCAT, CONCAT_WS, SUBSTRING, CHARLENGTH, DATALENGTH
 - Агрегатные функции
@@ -39,7 +37,7 @@
 DECLARE @table   array
 DECLARE @company entity
 
-USE 'mssql://zhichkin/unf'
+USE 'mssql://server/database'
 
    -- Запрос скалярного значения (entity)
    SELECT TOP 1 Ссылка INTO @company
@@ -69,7 +67,9 @@ THEN RETURN 'Нет данных'
 ELSE RETURN @table
 END
 ```
+
 **Результат выполнения запроса в DaJet Studio**
+
 |**Номенклатура**|**Количество**|
 |----------------|--------------|
 |{76:d0747380-7d2b-8cfd-11e5-47e1f8c9ef49}|102.500|

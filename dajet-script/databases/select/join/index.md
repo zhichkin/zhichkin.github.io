@@ -1,6 +1,4 @@
-## DaJet Script
-
-[SELECT](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/select/README.md)
+[SELECT](/dajet-script/databases/select)
 
 ### Оператор JOIN
 
@@ -26,7 +24,7 @@
 DECLARE @table   array
 DECLARE @company entity
 
-USE 'mssql://zhichkin/unf'
+USE 'mssql://server/database'
 
    -- Запрос скалярного значения (entity)
    SELECT Ссылка INTO @company
@@ -69,7 +67,7 @@ END
 DECLARE @table   array
 DECLARE @company entity
 
-USE 'mssql://zhichkin/unf'
+USE 'mssql://server/database'
 
    -- Запрос скалярного значения (entity)
    SELECT Ссылка INTO @company
@@ -116,7 +114,7 @@ END
 DECLARE @table   array
 DECLARE @company entity
 
-USE 'mssql://zhichkin/unf'
+USE 'mssql://server/database'
 
    -- Запрос скалярного значения (entity)
    SELECT Ссылка INTO @company

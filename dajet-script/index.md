@@ -18,7 +18,7 @@ description: Документация и примеры использовани
 - [Вызов скриптов по http](/http/index.md)
 - [Вызов внешних скриптов](/execute/index.md)
   - EXECUTE ```script.djs```
-- **Базы данных (mssql + pgsql)**
+- **Базы данных (mssql + pgsql + sqlite)**
   - [USE (контекст базы данных)](/use/index.md)
   - [Язык запросов DaJet Script](/databases/index.md)
   - [Произвольные запросы SQL](/request-sql/index.md)
