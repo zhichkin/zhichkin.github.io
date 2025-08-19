@@ -1,18 +1,16 @@
-## DaJet Script
-
-[Начало](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/README.md)
+[Назад](/dajet-script/databases)
 
 ### Команда STREAM
 
 - [Общее описание](#общее-описание)
 - [Простой пример](#простой-пример)
-- [Перенос данных](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/stream/data-transfer/README.md)
-- [Многопоточный перенос данных](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/stream/multithreading/README.md)
-- [Формирование сообщений из плана обмена с удалением обработанных изменений](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/stream/stream-and-delete/README.md)
+- [Перенос данных](/dajet-script/databases/stream/data-transfer)
+- [Многопоточный перенос данных](/dajet-script/databases/stream/multithreading)
+- [Формирование сообщений из плана обмена с удалением обработанных изменений](/dajet-script/databases/stream/stream-and-delete)
 
 #### Общее описание
 
-Команда **STREAM** аналогична команде [**SELECT**](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/select/README.md) - полностью реализует её синтаксис и функциональные возможности: общие табличные выражения, все виды соединений и так далее. Отличаются эти две команды только тем, каким образом процессор DaJet Script их обрабатывает.
+Команда **STREAM** аналогична команде [**SELECT**](/dajet-script/databases/select) - полностью реализует её синтаксис и функциональные возможности: общие табличные выражения, все виды соединений и так далее. Отличаются эти две команды только тем, каким образом процессор DaJet Script их обрабатывает.
 
 Результат выполнения команды **SELECT** целиком возвращается в переменную типа ```object``` или ```array``` среды выполнения DaJet Script, то есть в оперативную память программы. Во втором случае, в зависимости от размера выборки данных, это может привести к значительному или даже неприемлемому потреблению ресурсов. После выполнения команды **SELECT** управление передаётся следующей команде - скрипт выполняется линейно.
 
@@ -22,7 +20,7 @@
 
 Схематически процесс выполнения команды **STREAM** можно выразить следующим образом:
 
-![Схема выполнения команды STREAM](https://github.com/zhichkin/dajet/blob/main/doc/img/dajet-script-stream.png)
+![Схема выполнения команды STREAM](/dajet-script/databases/stream/img/dajet-script-stream.png)
 
 Таким образом команда **STREAM** реализует концепцию потокового обмена и обработки данных DaJet Script. Другими командами, реализующими данную концепцию аналогичным образом, являются **UPDATE** и **CONSUME**.
 

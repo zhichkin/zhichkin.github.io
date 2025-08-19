@@ -1,6 +1,4 @@
-## DaJet Script
-
-[STREAM](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/stream/README.md)
+[STREAM](/dajet-script/databases/stream)
 
 ### Перенос данных
 

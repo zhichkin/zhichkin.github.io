@@ -1,10 +1,8 @@
-## DaJet Script
-
-[CONSUME](https://github.com/zhichkin/dajet/tree/main/doc/dajet-script/databases/consume/README.md)
+[CONSUME](/dajet-script/databases/consume)
 
 ### Команда CONSUME, нюанс SQL Server
 
-Прежде, чем читать эту статью, следует ознакомиться со статьёй [Команда CONSUME, нюанс № 1](https://github.com/zhichkin/dajet/blob/main/doc/dajet-script/databases/consume/nuances/one/README.md).
+Прежде, чем читать эту статью, следует ознакомиться со статьёй [Команда CONSUME, нюанс № 1](/dajet-script/databases/consume/nuances/one).
 
 Данная статья освещает использование команды **CONSUME** без опции ```WITH STRICT ORDER``` исключительно в среде Microsoft SQL Server. Дело в том, что у хинта ```READPAST``` есть занятная особенность в поведении, которая очень трудна для воспроизведения в условиях промышленной эксплуатации обменов данными. Более того её сложно воспроизвести даже в лабораторных условиях.
 
@@ -67,7 +65,7 @@ SELECT _Fld124 AS НомерСообщения,
 
 **Результат выполнения скрипта шага № 2**
 
-![Результат обработки очереди](https://github.com/zhichkin/dajet/blob/main/doc/img/sql-server-consume-nuance.png)
+![Результат обработки очереди](/dajet-script/databases/consume/nuances/two/img/sql-server-consume-nuance.png)
 
 Что мы видим ? Из двух ожидаемых результатов мы получили третий! Обработано всего 3952 записи ... да ещё и с конца очереди ... Нарушена последовательсность обработки записей, которые фиксировались **в одной и той же транзакции** !!!
 
