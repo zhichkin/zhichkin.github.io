@@ -167,6 +167,147 @@ curl -X GET http://localhost:5000/md/ms-demo/Справочник/Банковс
       ],
       "References": []
     },
+  ... и так далее ...
   "TableParts": []
 }
+```
+
+#### GET ```/md/{infobase}/{type}/{name}?{details=full}```
+
+Получает логические связи (внешние ссылки) для свойств ссылочного типа объекта метаданных определённого типа.
+
+**Запрос**
+```
+curl -X GET http://localhost:5000/md/ms-demo/Справочник/БанковскиеСчета?details=full
+```
+
+**Ответ**
+```
+{
+  "Code": 21,
+  "Uuid": "46bd4919-eaaa-4d20-9448-1c15fffa60a4",
+  "Type": "Справочник",
+  "Name": "БанковскиеСчета",
+  "Alias": "Банковские счета",
+  "DbTable": "_Reference21",
+  "Comment": "",
+  "FullName": "Справочник.БанковскиеСчета",
+  "Properties": [
+    ... и так далее ...
+    {
+      "Uuid": "00000000-0000-0000-0000-000000000000",
+      "Name": "Владелец",
+      "Alias": "",
+      "Comment": "",
+      "Purpose": "СтандартныйРеквизит",
+      "Columns": [
+        {
+          "DbName": "_OwnerID_TYPE",
+          "Purpose": "Дискриминатор"
+        },
+        {
+          "DbName": "_OwnerID_RTRef",
+          "Purpose": "КодСсылки"
+        },
+        {
+          "DbName": "_OwnerID_RRRef",
+          "Purpose": "Ссылка"
+        }
+      ],
+      "DataType": [
+        {
+          "Type": "Ссылка"
+        }
+      ],
+      "References": [
+        {
+          "FullName": "Справочник.Организации"
+        },
+        {
+          "FullName": "Справочник.Контрагенты"
+        },
+        {
+          "FullName": "Справочник.ФизическиеЛица"
+        }
+      ]
+    },
+  ... и так далее ...
+  "TableParts": []
+}
+```
+
+#### GET ```/md/reset/{infobase}```
+
+Очищает кэш метаданных на сервере DaJet по имени базы данных.
+
+**Запрос**
+```
+curl -X GET http://localhost:5000/md/reset/ms-demo
+```
+
+**Ответ**
+```
+< HTTP/1.1 200 OK
+< Content-Length: 0
+< Date: Wed, 20 Aug 2025 19:04:32 GMT
+< Server: Kestrel
+```
+
+#### GET ```/md/diagnostic/{infobase}```
+
+Выполняет диагностику правильности чтения метаданных. Выполняется сравнение того, что DaJet прочитал, с реальной структурой базы данных. Сервер DaJet в теле ответа сообщает только несоответствия, если они имеют место быть. В противном случае тело ответа пустое.
+
+**Запрос**
+```
+curl -X GET http://localhost:5000/md/diagnostic/ms-demo
+```
+
+**Ответ**
+```
+< HTTP/1.1 200 OK
+< Content-Length: 289
+< Content-Type: text/plain; charset=utf-8
+< Date: Wed, 20 Aug 2025 19:11:02 GMT
+< Server: Kestrel
+<
+[_AccumRg29548] РегистрНакопления.ДвиженияДенежныхСредств
+* insert (отсутствующие поля)
+  - _dimhash
+[_AccumRg8102] РегистрНакопления.Продажи
+* insert (отсутствующие поля)
+  - _dimhash
+```
+
+#### POST ```/md```
+
+Регистрирует новую базу данных на сервере DaJet. В случае успеха возвращается HTTP-код 201 (Created), а в теле ответа - идентификатор записи в реестре баз данных сервера DaJet, который был передан в свойстве "Identity".
+
+**Запрос**
+```
+curl -X POST -H "Content-Type: application/json; charset=utf-8" -d @infobase.json http://localhost:5000/md
+```
+
+**Тело запроса в кодировке UTF-8, файл infobase.json**
+```
+{
+  "Code": 50,
+  "Identity": "78ffd48e-93d6-4628-8b5d-ef3a8c9569c0",
+  "Name": "new-infobase",
+  "Description": "Новая информационная база данных",
+  "UseExtensions": false,
+  "DatabaseProvider": "SqlServer",
+  "ConnectionString": "Data Source=server;Initial Catalog=database;Integrated Security=True;Encrypt=False;"
+}
+```
+
+**Ответ**
+```
+< HTTP/1.1 201 Created
+< Content-Type: application/json; charset=utf-8
+< Date: Wed, 20 Aug 2025 19:23:40 GMT
+< Server: Kestrel
+< Location: new-infobase
+< Transfer-Encoding: chunked
+<
+"78ffd48e-93d6-4628-8b5d-ef3a8c9569c0"
 ```
