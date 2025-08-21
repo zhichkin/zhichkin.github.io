@@ -77,6 +77,16 @@ curl -X GET http://localhost:5000/md/ms-demo
 
 Получает список объектов метаданных определённого типа.
 
+**Поддерживаемые значения для параметра ```{type}```**
+
+<table>
+  <tr><td>ОпределяемыйТип</td><td>ОбщийРеквизит</td><td>Константа</td></tr>
+  <tr><td>Перечисление</td><td>Справочник</td><td>Документ</td></tr>
+  <tr><td>ПланВидовХарактеристик</td><td>ПланОбмена</td><td>ПланСчетов</td></tr>
+  <tr><td>РегистрСведений</td><td>РегистрНакопления</td><td>РегистрБухгалтерии</td></tr>
+  <tr><td>Задача</td><td>БизнесПроцесс</td><td></td></tr>
+</table>
+
 **Запрос**
 ```
 curl -X GET http://localhost:5000/md/ms-demo/Справочник
@@ -101,7 +111,7 @@ curl -X GET http://localhost:5000/md/ms-demo/Справочник
 
 #### GET ```/md/{infobase}/{type}/{name}```
 
-Получает свойства объекта метаданных определённого типа.
+Получает свойства объекта метаданных по его имени.
 
 **Запрос**
 ```
@@ -174,7 +184,7 @@ curl -X GET http://localhost:5000/md/ms-demo/Справочник/Банковс
 
 #### GET ```/md/{infobase}/{type}/{name}?{details=full}```
 
-Получает логические связи (внешние ссылки) для свойств ссылочного типа объекта метаданных определённого типа.
+Получает логические связи (внешние ссылки) объектов метаданных. Заполняется коллекция значений ```References``` соответствующего свойства объекта метаданных. В приведённом ниже примере HTTP-ответа это свойство ```Владелец```, которое может ссылаться на три справочника.
 
 **Запрос**
 ```
@@ -242,7 +252,7 @@ curl -X GET http://localhost:5000/md/ms-demo/Справочник/Банковс
 
 **Запрос**
 ```
-curl -X GET http://localhost:5000/md/reset/ms-demo
+curl -v -X GET http://localhost:5000/md/reset/ms-demo
 ```
 
 **Ответ**
@@ -255,11 +265,11 @@ curl -X GET http://localhost:5000/md/reset/ms-demo
 
 #### GET ```/md/diagnostic/{infobase}```
 
-Выполняет диагностику правильности чтения метаданных. Выполняется сравнение того, что DaJet прочитал, с реальной структурой базы данных. Сервер DaJet в теле ответа сообщает только несоответствия, если они имеют место быть. В противном случае тело ответа пустое.
+Выполняет диагностику чтения метаданных платформой DaJet. Выполняется сравнение того, что DaJet прочитал, с реальной структурой базы данных. Сравниваются имена таблиц и полей СУБД. Сервер DaJet в теле ответа возвращает только несоответствия, в противном случае тело ответа пустое. Не все несоответствия являются критичными, чаще всего они не влияют на работу DaJet.
 
 **Запрос**
 ```
-curl -X GET http://localhost:5000/md/diagnostic/ms-demo
+curl -v -X GET http://localhost:5000/md/diagnostic/ms-demo
 ```
 
 **Ответ**
@@ -280,11 +290,11 @@ curl -X GET http://localhost:5000/md/diagnostic/ms-demo
 
 #### POST ```/md```
 
-Регистрирует новую базу данных на сервере DaJet. В случае успеха возвращается HTTP-код 201 (Created), а в теле ответа - идентификатор записи в реестре баз данных сервера DaJet, который был передан в свойстве "Identity".
+Регистрирует новую базу данных на сервере DaJet. В случае успеха возвращается HTTP-код 201 (Created), а в теле ответа - идентификатор записи в реестре баз данных сервера DaJet, который был передан в свойстве "Identity". Все свойства объекта JSON обязательны для заполнения.
 
 **Запрос**
 ```
-curl -X POST -H "Content-Type: application/json; charset=utf-8" -d @infobase.json http://localhost:5000/md
+curl -v -X POST -H "Content-Type: application/json; charset=utf-8" -d @infobase.json http://localhost:5000/md
 ```
 
 **Тело запроса в кодировке UTF-8, файл infobase.json**
@@ -310,4 +320,64 @@ curl -X POST -H "Content-Type: application/json; charset=utf-8" -d @infobase.jso
 < Transfer-Encoding: chunked
 <
 "78ffd48e-93d6-4628-8b5d-ef3a8c9569c0"
+```
+
+#### PUT ```/md```
+
+Обновляет свойства существующей базы данных на сервере DaJet. Значение свойства "Identity" обязательно должно соответствовать тому, что записано в реестре баз данных сервера DaJet, иначе будет возвращена ошибка 404 (Not found). Все свойства объекта JSON обязательны для заполнения.
+
+**Запрос**
+```
+curl -v -X PUT -H "Content-Type: application/json; charset=utf-8" -d @infobase.json http://localhost:5000/md
+```
+
+**Тело запроса в кодировке UTF-8, файл infobase.json**
+```
+{
+  "Code": 50,
+  "Identity": "78ffd48e-93d6-4628-8b5d-ef3a8c9569c0",
+  "Name": "updated-infobase",
+  "Description": "Обновлённая информационная база данных",
+  "UseExtensions": false,
+  "DatabaseProvider": "SqlServer",
+  "ConnectionString": "Data Source=server;Initial Catalog=database;Integrated Security=True;Encrypt=False;"
+}
+```
+
+**Ответ**
+```
+< HTTP/1.1 200 OK
+< Content-Length: 0
+< Date: Thu, 20 Aug 2025 19:23:41 GMT
+< Server: Kestrel
+```
+
+#### DELETE ```/md```
+
+Удаляет существующую запись в реестре баз данных сервера DaJet. Поиск выполняется по значению свойства "Identity". Если указанный идентификатор отсутствует, то будет возвращена ошибка 404 (Not found). Все свойства объекта JSON обязательны для заполнения.
+
+**Запрос**
+```
+curl -v -X DELETE -H "Content-Type: application/json; charset=utf-8" -d @infobase.json http://localhost:5000/md
+```
+
+**Тело запроса в кодировке UTF-8, файл infobase.json**
+```
+{
+  "Code": 50,
+  "Identity": "78ffd48e-93d6-4628-8b5d-ef3a8c9569c0",
+  "Name": "updated-infobase",
+  "Description": "Удаление базы данных из реестра сервера DaJet",
+  "UseExtensions": false,
+  "DatabaseProvider": "SqlServer",
+  "ConnectionString": "Data Source=server;Initial Catalog=database;Integrated Security=True;Encrypt=False;"
+}
+```
+
+**Ответ**
+```
+< HTTP/1.1 200 OK
+< Content-Length: 0
+< Date: Thu, 20 Aug 2025 19:23:45 GMT
+< Server: Kestrel
 ```
