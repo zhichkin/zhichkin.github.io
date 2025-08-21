@@ -42,7 +42,10 @@ RETURN JSON(@response.Value)
 [Подробнее](/dajet-web-api/mdex)
 
 ### Сервис /dajet
+
 Администрирование и выполнение скриптов DaJet Script
+
+[Подробнее](/dajet-web-api/dajet)
 
 ### Сервис /flow
 Администрирование конвейеров обработки и обмена данными
