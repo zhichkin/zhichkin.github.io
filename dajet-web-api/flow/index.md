@@ -148,3 +148,20 @@ curl -v -X PUT http://localhost:5000/flow/dispose/9bfd0610-0df0-42a0-8d1c-3f7429
 < Date: Fri, 22 Aug 2025 18:53:56 GMT
 < Server: Kestrel
 ```
+
+#### DELETE ```/flow/{pipeline-uuid}```
+
+Удаляет конвейер из сервера DaJet. Возвращает HTTP-код 200 (OK) в случае успеха.
+
+**Запрос**
+```
+curl -v -X DELETE http://localhost:5000/flow/9bfd0610-0df0-42a0-8d1c-3f74290673e2
+```
+
+**Ответ**
+```
+< HTTP/1.1 200 OK
+< Content-Length: 0
+< Date: Fri, 22 Aug 2025 19:00:19 GMT
+< Server: Kestrel
+```
