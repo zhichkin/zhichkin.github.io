@@ -1,6 +1,7 @@
 <a href="https://github.com/zhichkin/dajet"><img width="24" height="24" alt="GitHub" src="/assets/img/github-logo.png" /></a>&nbsp;&nbsp;
 <a href="https://hub.docker.com/r/zhichkin/dajet-studio"><img width="30" height="24" alt="DockerHub" src="/assets/img/docker-logo.png" /></a>&nbsp;&nbsp;
-<a href="https://t.me/dajet_studio"><img width="24" height="24" alt="Telegram" src="/assets/img/telegram-logo.png" /></a>
+<a href="https://t.me/dajet_studio"><img width="24" height="24" alt="Telegram" src="/assets/img/telegram-logo.png" /></a>&nbsp;&nbsp;
+<a href="https://infostart.ru/profile/525991"><img width="24" height="24" alt="Инфостарт" src="/assets/img/infostart-logo.jpg" /></a>
 
 DaJet Script – это расширяемый SQL-подобный язык программирования для организации обмена данными между узлами интеграции. Такими узлами могут быть реляционные базы данных, в том числе 1С:Предприятие 8, брокеры сообщений RabbitMQ или Apache Kafka, а также всевозможные сервисы, предоставляющие Web API интерфейс. DaJet Script является сердцем платформы DaJet, которая включает в себя ряд подсистем, необходимых для гибкой и успешной реализации потоковой обработки и обменов данными.
 
