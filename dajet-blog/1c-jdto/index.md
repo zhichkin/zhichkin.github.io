@@ -1,5 +1,5 @@
 ---
-title: Формат JDTO 1C:Предприятие 8
+title: Формат JDTO
 description: JSON data transfer object
 ---
 [Назад](/dajet-blog/#логическая-репликация-1с-предприятие-8)
