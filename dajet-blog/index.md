@@ -5,8 +5,8 @@ description: Статьи и прочие полезные материалы
 [Главная](../index.md#блог-dajet)
 
 ### Логическая репликация 1С:Предприятие 8
-- [Формат JDTO (JSON data transfer object)](/1c-jdto)
-- [Механизм репликации для 1С](/1c-logical-replication)
+- [Формат JDTO (JSON data transfer object)](/dajet-blog/1c-jdto)
+- [Механизм репликации для 1С](/dajet-blog/1c-logical-replication)
 
 ### Презентации (pdf)
 1. [Методика РИБ 2.0](/pdf/distributed-info-bases-design.pdf)
