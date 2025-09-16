@@ -16,3 +16,5 @@ description: Статьи и прочие полезные материалы
 ### Видео-уроки (mp4)
 1. [Тюнинг планов обмена](/mp4/exchange-plan-tuning.mp4)
 2. [Захват изменения данных регистров сведений](/mp4/info-register-change-data-capture.mp4)
+
+**2025-09-15** [Сервисный скрипт с перезапуском](/dajet-blog/run-service-script-and-restart-on-failure)
