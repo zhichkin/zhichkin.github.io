@@ -20,6 +20,7 @@ description: Документация и примеры использовани
   - EXECUTE ```script.djs```
 - **Базы данных (mssql + pgsql + sqlite)**
   - [USE (контекст базы данных)](/use/index.md)
+  - [Строки подключения к базам данных](/connection-strings/index.md)
   - [Язык запросов DaJet Script](/databases/index.md)
   - [Произвольные запросы SQL](/request-sql/index.md)
   - [Управление последовательностью](/sequence/index.md)
