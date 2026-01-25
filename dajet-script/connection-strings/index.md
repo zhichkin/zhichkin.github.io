@@ -10,7 +10,7 @@
 
 ```SQL
 USE '[<database_provider>]<connection_string>'
-REQUEST '[<expression>]<target_type>'
+REQUEST '[<database_provider>]<connection_string>'
 ```
 [Документация для строк подключения Sqlite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings)
 
