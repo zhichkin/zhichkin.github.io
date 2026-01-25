@@ -20,6 +20,7 @@ REQUEST '[<database_provider>]<connection_string>'
  - [pgsql]  - PostgreSQL без расширений конфигурации 1С:Предприятие 8
  - [pgsqlx] - PostgreSQL с подключением расширений 1С:Предприятие 8
  - [sqlite] - Sqlite (только для команды REQUEST)
+
 **\<connection_string\>** - строка подключения соответствующего провайдера данных.
 
 #### Строка подключения SQL Server
